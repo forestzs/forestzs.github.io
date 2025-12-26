@@ -353,12 +353,13 @@ body{
 
 .chips--tight{ gap:8px; }
 .chip--sm{
-  padding:6px 10px;
-  font-size: 12.5px;
+  padding:8px 12px;                 
+  font-size: inherit;               
   border-radius: 999px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.10);
+  border:1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.12);
 }
+
 
 .project{
   border-radius: 18px;
