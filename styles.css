@@ -432,3 +432,19 @@ body{
   color: color-mix(in oklab, var(--sec) 35%, rgba(255,255,255,.82) 65%);
   border-color: color-mix(in oklab, var(--sec) 42%, rgba(255,255,255,.16) 58%);
 }
+
+/* Calendar - highlight today */
+.cal__cell.is-today,
+.cal__cell.today {
+  border-color: rgba(255, 255, 255, 0.55) !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+/* If today is also selected, keep it highlighted */
+.cal__cell.is-today.is-selected,
+.cal__cell.today.is-selected {
+  border-color: rgba(255, 255, 255, 0.75) !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+}
+
