@@ -71,3 +71,54 @@ h2 {
 .muted {
   color: #666;
 }
+
+/* ====== Motion ====== */
+.reveal {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 500ms ease, transform 500ms ease;
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Card highlight that follows mouse (JS sets --mx/--my) */
+.highlight {
+  position: relative;
+  overflow: hidden;
+}
+.highlight::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: radial-gradient(
+    220px 220px at var(--mx, 30%) var(--my, 20%),
+    rgba(0,0,0,0.08),
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+/* Button ripple */
+.btn.ripple {
+  position: relative;
+  overflow: hidden;
+}
+.btn .rippleDot {
+  position: absolute;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  animation: ripple 600ms ease-out;
+  background: rgba(0,0,0,0.12);
+}
+@keyframes ripple {
+  from { width: 0; height: 0; opacity: 1; }
+  to   { width: 260px; height: 260px; opacity: 0; }
+}
+
+/* Smooth scrolling for anchors */
+html {
+  scroll-behavior: smooth;
+}
