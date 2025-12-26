@@ -18,16 +18,13 @@ body{
   overflow-x:hidden;
 }
 
-/* =========================
-   Background
-   ========================= */
+/* ===== Background ===== */
 .bg{
   position: fixed;
   inset: 0;
   z-index: -2;
   overflow: hidden;
 }
-
 .bg__img{
   position:absolute;
   inset:0;
@@ -38,7 +35,6 @@ body{
   filter: brightness(.75) contrast(1.05) saturate(1.08);
   transition: opacity .35s ease, transform 3s ease;
 }
-
 .bg__vignette{
   position:absolute;
   inset:0;
@@ -48,7 +44,7 @@ body{
   pointer-events: none;
 }
 
-/* Fixed controls: always clickable */
+/* Fixed bottom-right slider controls */
 .bg__controlsFixed{
   position: fixed;
   right: 24px;
@@ -59,7 +55,6 @@ body{
   pointer-events: auto;
 }
 
-/* Arrow button */
 .icon-btn{
   width:44px;
   height:44px;
@@ -78,9 +73,7 @@ body{
   background: rgba(0,0,0,.28);
 }
 
-/* =========================
-   Calendar (Top-right)
-   ========================= */
+/* ===== Calendar ===== */
 .cal{
   position: fixed;
   top: 18px;
@@ -91,7 +84,7 @@ body{
   background: rgba(10, 10, 12, .55);
   border: 1px solid rgba(255,255,255,.14);
   border-radius: 22px;
-  box-shadow: var(--shadow);
+  box-shadow: 0 18px 60px rgba(0,0,0,.45);
   backdrop-filter: blur(16px);
   padding: 14px 14px 12px;
   pointer-events: auto;
@@ -110,22 +103,16 @@ body{
   letter-spacing: .3px;
   line-height: 1.05;
 }
-
 .cal__date{
   margin-top: 4px;
   font-size: 14px;
   color: rgba(255,255,255,.78);
 }
 
-/* hide this line (Local time • Click a date...) */
-.cal__sub{
-  display:none;
-}
+/* ✅ 直接隐藏那句 “Local time • Click a date to select” */
+.cal__sub{ display:none; }
 
-.cal__nav{
-  display:flex;
-  gap:8px;
-}
+.cal__nav{ display:flex; gap:8px; }
 
 .cal__btn{
   width: 36px;
@@ -153,10 +140,7 @@ body{
   gap:10px;
 }
 
-.cal__month{
-  font-weight: 750;
-  color: rgba(255,255,255,.92);
-}
+.cal__month{ font-weight: 750; color: rgba(255,255,255,.92); }
 
 .cal__today{
   border: 1px solid rgba(255,255,255,.18);
@@ -193,7 +177,6 @@ body{
   grid-template-columns: repeat(7, 1fr);
   gap: 6px;
 }
-
 .cal__cell{
   height: 34px;
   border-radius: 12px;
@@ -208,7 +191,6 @@ body{
   background: rgba(0,0,0,.22);
   border-color: rgba(255,255,255,.22);
 }
-
 .cal__cell.is-other{ opacity: .45; }
 .cal__cell.is-today{ border-color: rgba(255,255,255,.28); }
 .cal__cell.is-selected{
@@ -221,9 +203,7 @@ body{
   .cal__time{ font-size: 30px; }
 }
 
-/* =========================
-   Foreground layout
-   ========================= */
+/* ===== Foreground layout ===== */
 .page{
   width: min(1040px, calc(100% - 28px));
   margin: 36px auto 60px;
@@ -298,7 +278,6 @@ body{
   flex-wrap:wrap;
   margin-top:14px;
 }
-
 .meta-chip{
   padding:8px 12px;
   border-radius:999px;
@@ -334,29 +313,19 @@ body{
   color: rgba(255,255,255,.86);
 }
 
-/* Education additions */
-.edu{ display:flex; flex-direction:column; gap:16px; }
+.edu{ display:flex; flex-direction:column; gap:18px; }
 .edu__title{ font-weight: 650; }
 .muted{ color: var(--muted); }
 
-.edu__courses{
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255,255,255,.10);
+.edu__divider{
+  height:1px;
+  margin:14px 0 10px;
+  background: rgba(255,255,255,.10);
 }
-.edu__coursesTitle{
-  font-size: 12px;
+.edu__label{
+  font-size: 13px;
   color: rgba(255,255,255,.62);
-  letter-spacing: .2px;
-  margin-bottom: 8px;
-}
-.chips--tight{ gap:8px; }
-.chip--sm{
-  padding:6px 10px;
-  font-size: 12.5px;
-  border-radius: 999px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.10);
+  margin-bottom: 10px;
 }
 
 .project{
@@ -382,10 +351,38 @@ body{
   color: rgba(255,255,255,.84);
   line-height: 1.55;
 }
+.ul li::marker{ color: rgba(255,255,255,.55); }
 
-.footer{
-  padding: 10px 2px;
-  text-align:center;
+.footer{ padding: 10px 2px; text-align:center; }
+
+/* Projects header row with nav */
+.projects__head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.projects__nav{
+  display:flex;
+  gap:10px;
+}
+
+.proj-btn{
+  width:40px;
+  height:40px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.16);
+  color: rgba(255,255,255,.92);
+  font-size: 22px;
+  line-height: 38px;
+  cursor:pointer;
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
+}
+.proj-btn:hover{
+  transform: translateY(-1px);
+  background: rgba(0,0,0,.26);
+  border-color: rgba(255,255,255,.26);
 }
 
 /* Reveal animation */
@@ -402,17 +399,17 @@ body{
 @media (prefers-reduced-motion: reduce){
   .reveal{ transition:none; }
   .bg__img{ transition:none; }
-  .btn,.icon-btn,.cal__btn,.cal__cell{ transition:none; }
+  .btn,.icon-btn,.cal__btn,.cal__cell,.proj-btn{ transition:none; }
 }
 
 /* ============================================================
    Resume section typography colors
    ============================================================ */
 .page .panel{ --sec: rgba(210,210,210,.9); }
-.page .panel.hero{ --sec: rgb(170, 205, 255); }                 /* soft blue */
-.page .grid > .panel:nth-child(1){ --sec: rgb(145, 225, 200); } /* mint */
-.page .grid > .panel:nth-child(2){ --sec: rgb(245, 205, 140); } /* warm amber */
-.page > section.panel{ --sec: rgb(205, 170, 255); }             /* soft purple */
+.page .panel.hero{ --sec: rgb(170, 205, 255); }
+.page .panel--edu{ --sec: rgb(145, 225, 200); }
+.page .panel--skills{ --sec: rgb(245, 205, 140); }
+.page .panel--projects{ --sec: rgb(205, 170, 255); }
 
 .page .panel .h2{
   color: color-mix(in oklab, var(--sec) 72%, rgba(255,255,255,.92) 28%);
@@ -434,55 +431,4 @@ body{
 .page .panel .meta-chip{
   color: color-mix(in oklab, var(--sec) 35%, rgba(255,255,255,.82) 65%);
   border-color: color-mix(in oklab, var(--sec) 42%, rgba(255,255,255,.16) 58%);
-}
-.page .panel .ul li::marker{
-  color: color-mix(in oklab, var(--sec) 70%, rgba(255,255,255,.45) 30%);
-}
-.page > section.panel .project__title{
-  color: color-mix(in oklab, var(--sec) 62%, rgba(255,255,255,.92) 38%);
-}
-.page > section.panel .project__time{
-  color: color-mix(in oklab, var(--sec) 35%, rgba(255,255,255,.62) 65%);
-}
-
-/* =========================
-   Projects carousel
-   ========================= */
-.sectionHead{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-
-.projNav{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.icon-btn--sm{
-  width:36px;
-  height:36px;
-  line-height:36px;
-  font-size:22px;
-  border-radius:14px;
-}
-
-.projCounter{
-  min-width:72px;
-  text-align:center;
-  font-size:13px;
-  color: rgba(255,255,255,.72);
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.12);
-}
-
-.projCarousel .projItem{ display:none; }
-.projCarousel .projItem.is-active{ display:block; }
-
-@media (max-width: 520px){
-  .projCounter{ min-width: 64px; }
 }
