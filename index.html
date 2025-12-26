@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -14,12 +13,12 @@
   <div class="bg" aria-hidden="true">
     <img class="bg__img" id="bgImg" src="./images/qishen.jpg" alt="" />
     <div class="bg__vignette"></div>
+  </div>
 
-    <!-- Bottom-right slider controls (fixed & always clickable) -->
-    <div class="bg__controlsFixed">
-      <button class="icon-btn" id="prevBtn" type="button" aria-label="Previous">‹</button>
-      <button class="icon-btn" id="nextBtn" type="button" aria-label="Next">›</button>
-    </div>
+  <!-- ✅ Fixed bottom-right slider controls (MUST be OUTSIDE .bg) -->
+  <div class="bg__controlsFixed" aria-label="Background controls">
+    <button class="icon-btn" id="prevBtn" type="button" aria-label="Previous">‹</button>
+    <button class="icon-btn" id="nextBtn" type="button" aria-label="Next">›</button>
   </div>
 
   <!-- Top-right Calendar Widget (EN) -->
