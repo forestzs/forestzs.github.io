@@ -15,12 +15,10 @@
     <img class="bg__img" id="bgImg" src="./images/qishen.jpg" alt="" />
     <div class="bg__vignette"></div>
 
-    <!-- bottom-right controls only -->
-    <div class="bg__hud">
-      <div class="bg__controls">
-        <button class="icon-btn" id="prevBtn" type="button" aria-label="Previous">‹</button>
-        <button class="icon-btn" id="nextBtn" type="button" aria-label="Next">›</button>
-      </div>
+    <!-- Bottom-right slider controls (fixed & always clickable) -->
+    <div class="bg__controlsFixed">
+      <button class="icon-btn" id="prevBtn" type="button" aria-label="Previous">‹</button>
+      <button class="icon-btn" id="nextBtn" type="button" aria-label="Next">›</button>
     </div>
   </div>
 
@@ -30,6 +28,7 @@
       <div>
         <div class="cal__time" id="calTime">--:--:--</div>
         <div class="cal__date" id="calDate">---, --- --, ----</div>
+        <div class="cal__sub" id="calSub">Local time</div>
       </div>
 
       <div class="cal__nav">
@@ -52,7 +51,7 @@
 
   <!-- Foreground content -->
   <main class="page">
-    <header class="panel hero reveal">
+    <header class="panel hero reveal panel--hero">
       <div class="hero__top">
         <div>
           <h1 class="hero__name">Zhengshu Zhang</h1>
@@ -82,7 +81,7 @@
     </header>
 
     <section class="grid">
-      <section class="panel reveal">
+      <section class="panel reveal panel--edu">
         <h2 class="h2">Education</h2>
         <div class="edu">
           <div class="edu__item">
@@ -96,7 +95,7 @@
         </div>
       </section>
 
-      <section class="panel reveal">
+      <section class="panel reveal panel--skills">
         <h2 class="h2">Skills</h2>
 
         <h3 class="h3">Languages</h3>
@@ -122,7 +121,7 @@
       </section>
     </section>
 
-    <section class="panel reveal">
+    <section class="panel reveal panel--projects">
       <h2 class="h2">Projects</h2>
 
       <article class="project">
