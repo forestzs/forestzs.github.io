@@ -11,10 +11,26 @@ from typing import List, Dict, Optional, Tuple
 DEFAULT_GITHUB = "https://github.com/forestzs"
 DEFAULT_SUBTITLE = "Software Engineer • USC MS Spatial Data Science • Los Angeles"
 
+SECTION_HEADERS = [
+    "SUMMARY",
+    "EDUCATION",
+    "EXPERIENCE",
+    "PROJECTS",
+    "TECHNICAL SKILLS",
+    "SKILLS",
+]
 
-# -----------------------------
-# Utils
-# -----------------------------
+MONTH_RE = r"(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t)?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)"
+DASH_RE = r"(?:-|\u2013|\u2014)"  # -, – , —
+DATE_RANGE_RE = re.compile(rf"\b({MONTH_RE}\s*\d{{4}}\s*{DASH_RE}\s*{MONTH_RE}\s*\d{{4}})\b", re.IGNORECASE)
+
+PHONE_RE = re.compile(r"(\+?\d[\d\-\s\(\)]{7,}\d)")
+EMAIL_RE = re.compile(r"([A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,})", re.IGNORECASE)
+URL_RE = re.compile(r"(https?://[^\s|]+)", re.IGNORECASE)
+
+BULLET_RE = re.compile(r"^[■\-\*]\s*(.+)$")
+
+
 def iso_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -24,44 +40,28 @@ def write_json(path: str, obj: Dict) -> None:
         json.dump(obj, f, ensure_ascii=False, indent=2)
 
 
-def normalize_text(text: str) -> str:
-    if not text:
-        return ""
-
-    text = text.replace("\r\n", "\n").replace("\r", "\n")
-
-    # Fix hyphenation across line breaks: "data-\nintensive" -> "data-intensive"
-    text = re.sub(r"(\w)-\n(\w)", r"\1-\2", text)
-
-    # Normalize bullets to ■
-    for b in ["•", "◼", "◾", "▪", "●", "–", "—", "•"]:
-        text = text.replace(b, "■")
-
-    # Strip trailing spaces per line
-    text = "\n".join([ln.rstrip() for ln in text.split("\n")])
-
-    # Reduce multiple blank lines
-    text = re.sub(r"\n{3,}", "\n\n", text).strip()
-    return text
-
-
 def collapse_ws(s: str) -> str:
-    return re.sub(r"\s+", " ", s).strip()
-
-
-def lines_nonempty(text: str) -> List[str]:
-    return [collapse_ws(ln) for ln in text.split("\n") if collapse_ws(ln)]
+    return re.sub(r"\s+", " ", (s or "")).strip()
 
 
 def norm_key(s: str) -> str:
-    return re.sub(r"[^A-Z0-9]+", "", s.upper())
+    return re.sub(r"[^A-Z0-9]+", "", (s or "").upper())
+
+
+def normalize_bullets(s: str) -> str:
+    if not s:
+        return ""
+    # normalize a bunch of bullet chars into ■
+    for b in ["•", "◼", "◾", "▪", "●", "–", "—"]:
+        s = s.replace(b, "■")
+    return s
 
 
 def unique_preserve(seq: List[str]) -> List[str]:
     seen = set()
     out = []
     for x in seq:
-        t = x.strip()
+        t = collapse_ws(x)
         if not t:
             continue
         k = t.lower()
@@ -73,26 +73,63 @@ def unique_preserve(seq: List[str]) -> List[str]:
 
 
 # -----------------------------
-# PDF extraction
+# Extract text from DOCX (preferred)
+# -----------------------------
+def extract_lines_from_docx(docx_path: str) -> List[str]:
+    """
+    Returns a list of "lines" where bullet/list paragraphs become:
+      '■ <text>'
+    """
+    from docx import Document  # python-docx
+
+    doc = Document(docx_path)
+    out: List[str] = []
+
+    def para_is_list(p) -> bool:
+        # most list paragraphs have numPr in pPr
+        ppr = p._p.pPr
+        if ppr is not None and ppr.numPr is not None:
+            return True
+        # fallback: style name contains List
+        try:
+            if p.style and p.style.name and "List" in p.style.name:
+                return True
+        except Exception:
+            pass
+        return False
+
+    for p in doc.paragraphs:
+        t = collapse_ws(normalize_bullets(p.text))
+        if not t:
+            continue
+
+        # If it's already starting with bullet symbol, keep it as bullet line
+        if t.startswith("■"):
+            out.append(t if t.startswith("■ ") else ("■ " + t.lstrip("■").strip()))
+            continue
+
+        if para_is_list(p):
+            out.append("■ " + t)
+        else:
+            out.append(t)
+
+    return out
+
+
+# -----------------------------
+# Extract text from PDF (fallback)
 # -----------------------------
 def extract_text_pymupdf_words(pdf_path: str) -> str:
-    """
-    Most robust: use PyMuPDF words and rebuild lines with spaces.
-    """
     import fitz  # PyMuPDF
 
     doc = fitz.open(pdf_path)
     all_lines: List[str] = []
-
     for page in doc:
-        words = page.get_text("words")  # x0,y0,x1,y1,word,block,line,word_no
+        words = page.get_text("words")
         if not words:
             all_lines.append(page.get_text("text") or "")
             continue
-
-        # sort words top-to-bottom, left-to-right
-        words.sort(key=lambda w: (w[5], w[6], w[1], w[0]))  # block,line,y,x
-
+        words.sort(key=lambda w: (w[5], w[6], w[1], w[0]))
         cur_key: Optional[Tuple[int, int]] = None
         cur_line: List[str] = []
 
@@ -104,102 +141,62 @@ def extract_text_pymupdf_words(pdf_path: str) -> str:
 
         for w in words:
             word = str(w[4]).strip()
-            block = int(w[5])
-            line = int(w[6])
-            key = (block, line)
-
+            key = (int(w[5]), int(w[6]))
             if cur_key is None:
                 cur_key = key
-
             if key != cur_key:
                 flush()
                 cur_key = key
-
             if word:
                 cur_line.append(word)
 
         flush()
-        all_lines.append("")  # page sep
-
+        all_lines.append("")
     return "\n".join(all_lines)
 
 
-def extract_text_from_pdf(pdf_path: str) -> str:
-    if not os.path.exists(pdf_path):
-        raise FileNotFoundError(f"Cannot find PDF: {pdf_path}")
-
-    # 1) PyMuPDF words
-    try:
-        t = extract_text_pymupdf_words(pdf_path)
-        if t and t.strip():
-            return t
-    except Exception:
-        pass
-
-    # 2) pdfplumber
-    try:
-        import pdfplumber
-        chunks: List[str] = []
-        with pdfplumber.open(pdf_path) as pdf:
-            for page in pdf.pages:
-                txt = page.extract_text(layout=True) or page.extract_text() or ""
-                chunks.append(txt)
-        t = "\n".join(chunks)
-        if t and t.strip():
-            return t
-    except Exception:
-        pass
-
-    # 3) pypdf
-    try:
-        from pypdf import PdfReader
-        reader = PdfReader(pdf_path)
-        chunks = []
-        for p in reader.pages:
-            chunks.append(p.extract_text() or "")
-        t = "\n".join(chunks)
-        if t and t.strip():
-            return t
-    except Exception:
-        pass
-
-    return ""
+def extract_lines_from_pdf(pdf_path: str) -> List[str]:
+    t = extract_text_pymupdf_words(pdf_path)
+    t = normalize_bullets(t)
+    # keep real newlines, then flatten later
+    raw_lines = [collapse_ws(x) for x in t.split("\n")]
+    return [x for x in raw_lines if x]
 
 
 # -----------------------------
-# Preprocess lines (关键：拆标题/拆 bullets/清垃圾)
+# Preprocess lines
 # -----------------------------
-SECTION_HEADERS = [
-    "SUMMARY",
-    "EDUCATION",
-    "EXPERIENCE",
-    "PROJECTS",
-    "TECHNICAL SKILLS",
-    "SKILLS",
-]
-SECTION_KEYS = [norm_key(h) for h in SECTION_HEADERS]
+SECTION_KEYS = set(norm_key(h) for h in SECTION_HEADERS)
 
 HEADERS_SPLIT_RE = re.compile(
     r"\b(SUMMARY|EDUCATION|EXPERIENCE|PROJECTS|TECHNICAL\s+SKILLS|SKILLS)\b",
     re.IGNORECASE
 )
 
-PUNCT_ONLY_RE = re.compile(r"^[\)\(\]\[\{\}]+$")
-
 
 def preprocess_lines(lines: List[str]) -> List[str]:
     out: List[str] = []
     for ln in lines:
-        ln = collapse_ws(ln)
+        ln = collapse_ws(normalize_bullets(ln))
         if not ln:
             continue
-        if PUNCT_ONLY_RE.match(ln):
+
+        # split header when header + content in same line
+        m = HEADERS_SPLIT_RE.search(ln)
+        if m and norm_key(ln) not in SECTION_KEYS:
+            header = m.group(1).upper().replace("  ", " ")
+            before = ln[:m.start(1)].strip()
+            after = ln[m.end(1):].strip()
+            if before:
+                out.append(before)
+            out.append(header)
+            if after:
+                out.append(after)
             continue
 
-        # 如果一行里出现多个 ■，拆开成多行（保留为 bullet 行）
-        if "■" in ln and not ln.strip().upper() in SECTION_HEADERS:
+        # If line contains multiple bullets in one line (mainly PDF), split them
+        if "■" in ln and norm_key(ln) not in SECTION_KEYS and not ln.startswith("■"):
             parts = [p.strip() for p in ln.split("■")]
-            # 例： "abc ■ bullet1 ■ bullet2" -> "abc" + "■ bullet1" + "■ bullet2"
             if parts and parts[0]:
                 out.append(parts[0])
             for p in parts[1:]:
@@ -207,54 +204,31 @@ def preprocess_lines(lines: List[str]) -> List[str]:
                     out.append("■ " + p)
             continue
 
-        # 拆标题：比如 "SUMMARY xxx" -> "SUMMARY" + "xxx"
-        m = HEADERS_SPLIT_RE.search(ln)
-        if m and ln.strip().upper() not in SECTION_HEADERS:
-            # 只在“标题不是整行”的情况下拆
-            header = m.group(1)
-            # 找到 header 的位置
-            start = m.start(1)
-            end = m.end(1)
-            before = ln[:start].strip()
-            after = ln[end:].strip()
-
-            if before:
-                out.append(before)
-            out.append(header.upper().replace("  ", " "))
-            if after:
-                out.append(after)
-            continue
-
         out.append(ln)
 
-    # 再做一遍：去掉完全空 / 重复
+    # de-dup identical consecutive
     out2: List[str] = []
     prev = None
     for x in out:
-        x = collapse_ws(x)
-        if not x or PUNCT_ONLY_RE.match(x):
-            continue
-        if prev == x:
+        if x == prev:
             continue
         out2.append(x)
         prev = x
-
     return out2
 
 
 # -----------------------------
 # Section slicing
 # -----------------------------
-def is_any_header_line(line: str) -> bool:
-    k = norm_key(line)
-    return k in SECTION_KEYS
+def is_header_line(line: str) -> bool:
+    return norm_key(line) in SECTION_KEYS
 
 
 def find_header_index(lines: List[str], header: str) -> int:
     target = norm_key(header)
-    for idx, ln in enumerate(lines):
+    for i, ln in enumerate(lines):
         if norm_key(ln) == target:
-            return idx
+            return i
     return -1
 
 
@@ -264,26 +238,17 @@ def slice_section(lines: List[str], header: str) -> List[str]:
         return []
     end = len(lines)
     for j in range(start + 1, len(lines)):
-        if is_any_header_line(lines[j]):
+        if is_header_line(lines[j]):
             end = j
             break
     return lines[start + 1: end]
 
 
 # -----------------------------
-# Parse basics
+# Parse blocks
 # -----------------------------
-PHONE_RE = re.compile(r"(\+?\d[\d\-\s\(\)]{7,}\d)")
-EMAIL_RE = re.compile(r"([A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,})", re.IGNORECASE)
-URL_RE = re.compile(r"(https?://[^\s|]+)", re.IGNORECASE)
-
-MONTH_RE = r"(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t)?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)"
-DATE_RANGE_RE = re.compile(rf"({MONTH_RE}\s*\d{{4}}\s*[-–]\s*{MONTH_RE}\s*\d{{4}})", re.IGNORECASE)
-MONTH_YEAR_RE = re.compile(rf"^{MONTH_RE}\s*\d{{4}}", re.IGNORECASE)
-
-
 def parse_name(lines: List[str]) -> str:
-    return lines[0].strip() if lines else ""
+    return lines[0] if lines else ""
 
 
 def parse_contact_line(lines: List[str]) -> Dict[str, str]:
@@ -298,21 +263,21 @@ def parse_contact_line(lines: List[str]) -> Dict[str, str]:
 
     m = PHONE_RE.search(line)
     if m:
-        contact["phone"] = m.group(1).strip()
+        contact["phone"] = collapse_ws(m.group(1))
 
     m = EMAIL_RE.search(line)
     if m:
-        contact["email"] = m.group(1).strip()
+        contact["email"] = collapse_ws(m.group(1))
 
     urls = URL_RE.findall(line)
     for u in urls:
         ul = u.lower()
         if "linkedin.com" in ul:
-            contact["linkedin"] = u.strip()
+            contact["linkedin"] = u
         elif "github.com" in ul:
-            contact["github"] = u.strip()
+            contact["github"] = u
 
-    # location: pick last part that isn't phone/email/url
+    # location: last part that isn't phone/email/url
     for p in reversed(parts):
         if not p:
             continue
@@ -322,7 +287,7 @@ def parse_contact_line(lines: List[str]) -> Dict[str, str]:
             continue
         if PHONE_RE.search(p) and len(p) <= 25:
             continue
-        contact["location"] = p
+        contact["location"] = collapse_ws(p)
         break
 
     if not contact["github"]:
@@ -335,24 +300,7 @@ def parse_summary(lines: List[str]) -> str:
     sec = slice_section(lines, "SUMMARY")
     if not sec:
         return ""
-    txt = collapse_ws(" ".join(sec))
-
-    # 防止 summary 混入教育/项目（兜底）
-    txt = re.split(r"\b(University of|EDUCATION|PROJECTS|TECHNICAL SKILLS|SKILLS)\b", txt, flags=re.IGNORECASE)[0].strip()
-    return txt
-
-
-# -----------------------------
-# Education (合并 location 行)
-# -----------------------------
-LOC_RE = re.compile(r".+,\s*[A-Z]{2}\b")  # Los Angeles, CA
-def looks_like_location_line(s: str) -> bool:
-    if LOC_RE.match(s):
-        return True
-    # 例如 Ya’an, SiChuan
-    if "," in s and len(s) <= 28 and not DATE_RANGE_RE.search(s):
-        return True
-    return False
+    return collapse_ws(" ".join(sec))
 
 
 def parse_education(lines: List[str]) -> List[Dict[str, str]]:
@@ -360,43 +308,56 @@ def parse_education(lines: List[str]) -> List[Dict[str, str]]:
     if not sec:
         return []
 
-    # 先把 “学校 + location” 拼成一行
-    merged: List[str] = []
-    for ln in sec:
-        if not merged:
-            merged.append(ln)
-            continue
-        if looks_like_location_line(ln) and not merged[-1].endswith(","):
-            merged[-1] = merged[-1] + " " + ln
-        else:
-            merged.append(ln)
-
     items: List[Dict[str, str]] = []
-    i = 0
-    while i < len(merged):
-        school = merged[i].strip()
-        degree = merged[i + 1].strip() if i + 1 < len(merged) else ""
-        # 跳过明显垃圾
-        if PUNCT_ONLY_RE.match(school) or school in [")", "("]:
-            i += 1
+    cur_school = ""
+    cur_degree = ""
+
+    DEG_HINT = re.compile(r"\b(Master|Bachelor|PhD|B\.S\.|M\.S\.|B\.Eng|M\.Eng)\b", re.IGNORECASE)
+
+    def push():
+        nonlocal cur_school, cur_degree
+        if collapse_ws(cur_school):
+            items.append({"school": collapse_ws(cur_school), "degree": collapse_ws(cur_degree)})
+        cur_school, cur_degree = "", ""
+
+    for ln in sec:
+        ln = collapse_ws(ln)
+        if not ln:
             continue
-        if school:
-            items.append({"school": school, "degree": degree})
-        i += 2
 
-    return items
+        # heuristics: school line contains University/College or ends with CA etc
+        if ("University" in ln) or ("College" in ln) or ("Institute" in ln) or ln.endswith(", CA"):
+            # start new record
+            if cur_school:
+                push()
+            cur_school = ln
+            continue
+
+        # degree line
+        if DEG_HINT.search(ln) or re.search(r"\b\d{4}\b", ln):
+            if not cur_school:
+                # sometimes school line missing; treat as school
+                cur_school = ln
+            else:
+                cur_degree = (cur_degree + " " + ln).strip()
+            continue
+
+        # fallback: append
+        if cur_degree:
+            cur_degree = (cur_degree + " " + ln).strip()
+        else:
+            # could be location line for school
+            if cur_school:
+                cur_school = (cur_school + " " + ln).strip()
+            else:
+                cur_school = ln
+
+    push()
+    # remove empty
+    return [it for it in items if it["school"] or it["degree"]]
 
 
-# -----------------------------
-# Projects (支持 title/time 分行 + bullets 拆分)
-# -----------------------------
-BULLET_RE = re.compile(r"^[■\-\*]\s*(.+)$")
-
-
-def extract_time_and_title(line: str) -> Optional[Tuple[str, str]]:
-    """
-    Return (title, time) if line contains a date range and has some title text before it.
-    """
+def split_project_header(line: str) -> Optional[Tuple[str, str]]:
     m = DATE_RANGE_RE.search(line)
     if not m:
         return None
@@ -405,14 +366,9 @@ def extract_time_and_title(line: str) -> Optional[Tuple[str, str]]:
     return (title, time)
 
 
-def is_time_only_line(line: str) -> bool:
-    line = line.strip()
-    if DATE_RANGE_RE.fullmatch(line):
-        return True
-    # 有些 PDF 会变成 "May 2025-June 2025" 没空格，这里放宽
-    if MONTH_YEAR_RE.match(line) and re.search(r"\d{4}.*[-–].*\d{4}", line):
-        return True
-    return False
+def is_time_only(line: str) -> bool:
+    line = collapse_ws(line)
+    return bool(DATE_RANGE_RE.fullmatch(line))
 
 
 def parse_projects(lines: List[str]) -> List[Dict[str, object]]:
@@ -428,19 +384,19 @@ def parse_projects(lines: List[str]) -> List[Dict[str, object]]:
         nonlocal cur
         if not cur:
             return
-        bullets = cur.get("bullets", [])
-        if isinstance(bullets, list):
-            cur["bullets"] = [collapse_ws(b) for b in bullets if collapse_ws(str(b))]
-        # 丢掉 title/time 都空的垃圾
+        cur["bullets"] = [collapse_ws(b) for b in (cur.get("bullets") or []) if collapse_ws(str(b))]
+        # filter garbage
         if cur.get("title") or cur.get("time") or cur.get("bullets"):
             projects.append(cur)
         cur = None
 
     for ln in sec:
-        ln = ln.strip()
+        ln = collapse_ws(ln)
+        if not ln:
+            continue
 
-        # 可能是 "Food ... July 2024-Aug 2024" 在同一行
-        tt = extract_time_and_title(ln)
+        # header in one line: Title + Time
+        tt = split_project_header(ln)
         if tt:
             push()
             title, time = tt
@@ -448,47 +404,52 @@ def parse_projects(lines: List[str]) -> List[Dict[str, object]]:
             pending_title = None
             continue
 
-        # 可能是 “标题一行，时间下一行”
-        if cur is None and not ln.startswith("■") and not is_time_only_line(ln):
-            # 暂存可能的 title
+        # title line (standalone)
+        if cur is None and not ln.startswith("■") and not is_time_only(ln):
             pending_title = ln
             continue
 
-        if cur is None and pending_title and is_time_only_line(ln):
+        # time line (standalone)
+        if cur is None and pending_title and is_time_only(ln):
             push()
             cur = {"title": pending_title, "time": ln, "bullets": []}
             pending_title = None
             continue
 
-        # bullets
+        # bullet
         bm = BULLET_RE.match(ln)
         if bm and cur is not None:
-            cur["bullets"].append(bm.group(1).strip())
+            cur["bullets"].append(bm.group(1))
             continue
 
-        # 如果 pending_title 存着，但又遇到不是时间的行，说明 pending_title 不是项目名，落回去
-        if cur is None and pending_title and not is_time_only_line(ln):
-            # 把 pending_title 丢弃（一般是两栏错位导致的）
-            pending_title = None
-
-        # continuation lines (wrap)
+        # continuation
         if cur is not None:
             if cur["bullets"]:
                 cur["bullets"][-1] = (cur["bullets"][-1] + " " + ln).strip()
             else:
-                # 允许没有 bullet 的第一行补充
+                # allow first non-bullet content as bullet
                 cur["bullets"].append(ln)
 
     push()
-    return projects
+
+    # final cleanup: drop entries with empty title AND bullets look like next project title
+    cleaned = []
+    for p in projects:
+        title = collapse_ws(str(p.get("title", "")))
+        if not title and p.get("bullets"):
+            # if first bullet looks like a project title, move it into title
+            b0 = collapse_ws(p["bullets"][0])
+            if "Web App" in b0 or "App" in b0:
+                p["title"] = b0
+                p["bullets"] = p["bullets"][1:]
+        cleaned.append(p)
+
+    return cleaned
 
 
-# -----------------------------
-# Skills
-# -----------------------------
 def split_csvish(s: str) -> List[str]:
     parts = re.split(r"[;,]", s)
-    return [p.strip() for p in parts if p.strip()]
+    return [collapse_ws(p) for p in parts if collapse_ws(p)]
 
 
 def parse_skills(lines: List[str]) -> Dict[str, List[str]]:
@@ -505,8 +466,7 @@ def parse_skills(lines: List[str]) -> Dict[str, List[str]]:
         m = re.search(pat, text, flags=re.IGNORECASE)
         if not m:
             return []
-        val = (m.group(1) or "").strip()
-        return split_csvish(val) if val else []
+        return split_csvish(m.group(1) or "")
 
     languages = grab(r"Languages?")
     frameworks = grab(r"Frameworks\s*&\s*Libraries|Frameworks\s*/\s*Libraries|Frameworks|Libraries")
@@ -526,19 +486,17 @@ def parse_skills(lines: List[str]) -> Dict[str, List[str]]:
 # -----------------------------
 # Build output
 # -----------------------------
-def build_structured(raw_text: str) -> Dict[str, object]:
-    ln = preprocess_lines(lines_nonempty(raw_text))
-
-    name = parse_name(ln) or "Zhengshu Zhang"
-    contact = parse_contact_line(ln)
-    summary = parse_summary(ln)
-    education = parse_education(ln)
-    projects = parse_projects(ln)
-    skills = parse_skills(ln)
+def build_structured(lines: List[str], source_name: str) -> Dict[str, object]:
+    name = parse_name(lines) or "Zhengshu Zhang"
+    contact = parse_contact_line(lines)
+    summary = parse_summary(lines)
+    education = parse_education(lines)
+    projects = parse_projects(lines)
+    skills = parse_skills(lines)
 
     return {
         "generated_at": iso_now(),
-        "source": "resume.pdf",
+        "source": source_name,
         "name": name,
         "subtitle": DEFAULT_SUBTITLE,
         "summary": summary,
@@ -552,13 +510,27 @@ def build_structured(raw_text: str) -> Dict[str, object]:
 
 def main() -> None:
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+    docx_path = os.path.join(repo_root, "resume.docx")
     pdf_path = os.path.join(repo_root, "resume.pdf")
 
-    raw = extract_text_from_pdf(pdf_path)
-    raw = normalize_text(raw)
+    if os.path.exists(docx_path):
+        raw_lines = extract_lines_from_docx(docx_path)
+        source = "resume.docx"
+    else:
+        raw_lines = extract_lines_from_pdf(pdf_path)
+        source = "resume.pdf"
 
-    raw_out = {"generated_at": iso_now(), "source": "resume.pdf", "text": raw}
-    structured = build_structured(raw)
+    lines = preprocess_lines(raw_lines)
+
+    # raw output: for debugging
+    raw_out = {
+        "generated_at": iso_now(),
+        "source": source,
+        "lines": lines,
+    }
+
+    structured = build_structured(lines, source)
 
     write_json(os.path.join(repo_root, "resume_raw.json"), raw_out)
     write_json(os.path.join(repo_root, "resume.json"), structured)
