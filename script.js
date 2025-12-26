@@ -125,9 +125,6 @@ function updateCalHeader(){
   calDate.textContent = new Intl.DateTimeFormat('en-US', {
     weekday: 'short', month: 'short', day: '2-digit', year: 'numeric'
   }).format(now);
-
-  // Sub line
-  if (calSub) calSub.textContent = 'Local time • Click a date to select';
 }
 
 function renderCalendar(){
