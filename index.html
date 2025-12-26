@@ -15,7 +15,7 @@
     <div class="bg__vignette"></div>
   </div>
 
-  <!-- IMPORTANT: controls must be OUTSIDE .bg because .bg has z-index:-2 (child z-index can't escape) -->
+  <!-- ✅ Fixed bottom-right slider controls (MUST be OUTSIDE .bg) -->
   <div class="bg__controlsFixed" aria-label="Background controls">
     <button class="icon-btn" id="prevBtn" type="button" aria-label="Previous">‹</button>
     <button class="icon-btn" id="nextBtn" type="button" aria-label="Next">›</button>
@@ -53,36 +53,44 @@
     <header class="panel hero reveal panel--hero">
       <div class="hero__top">
         <div>
-          <h1 class="hero__name" id="nameEl">Zhengshu Zhang</h1>
-          <p class="hero__subtitle" id="titleEl">
+          <h1 class="hero__name">Zhengshu Zhang</h1>
+          <p class="hero__subtitle">
             Software Engineer • USC MS Spatial Data Science • Los Angeles
           </p>
         </div>
 
         <div class="hero__links">
-          <a class="btn" id="githubLink" href="https://github.com/forestzs" target="_blank" rel="noreferrer">GitHub</a>
-          <a class="btn" id="linkedinLink" href="https://www.linkedin.com/in/zhengshuzhang/" target="_blank" rel="noreferrer">LinkedIn</a>
-          <a class="btn" id="emailLink" href="mailto:forestzhengshu@gmail.com">Email</a>
-          <a class="btn btn--primary" id="resumeLink" href="./resume.pdf" target="_blank" rel="noreferrer">Resume</a>
+          <a class="btn" href="https://github.com/forestzs" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="btn" href="https://www.linkedin.com/in/zhengshuzhang/" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a class="btn" href="mailto:forestzhengshu@gmail.com">Email</a>
+          <a class="btn btn--primary" href="./resume.pdf" target="_blank" rel="noreferrer">Resume</a>
         </div>
       </div>
 
       <div class="hero__meta">
-        <span class="meta-chip" id="phoneEl">+1 323-916-7934</span>
-        <span class="meta-chip" id="locationEl">Los Angeles, CA</span>
-        <span class="meta-chip" id="emailTextEl">forestzhengshu@gmail.com</span>
+        <span class="meta-chip">+1 323-916-7934</span>
+        <span class="meta-chip">Los Angeles, CA</span>
+        <span class="meta-chip">forestzhengshu@gmail.com</span>
       </div>
 
-      <p class="hero__summary" id="summaryEl">
+      <p class="hero__summary">
         Software engineer with experience in full-stack development, cloud deployment, and data-intensive applications.
+        Skilled in Java, Spring Boot, and modern web technologies with expertise in building scalable systems and responsive user interfaces.
       </p>
     </header>
 
     <section class="grid">
       <section class="panel reveal panel--edu">
         <h2 class="h2">Education</h2>
-        <div class="edu" id="eduList">
-          <!-- JS will render education items here, keeping same classes -->
+        <div class="edu">
+          <div class="edu__item">
+            <div class="edu__title">University of Southern California</div>
+            <div class="muted">Master of Science in Spatial Data Science</div>
+          </div>
+          <div class="edu__item">
+            <div class="edu__title">Sichuan Agricultural University</div>
+            <div class="muted">Bachelor of Engineering in Food Quality and Safety</div>
+          </div>
         </div>
       </section>
 
@@ -90,21 +98,78 @@
         <h2 class="h2">Skills</h2>
 
         <h3 class="h3">Languages</h3>
-        <div class="chips" id="skillsLanguages"></div>
+        <div class="chips">
+          <span class="chip">Java</span><span class="chip">JavaScript</span><span class="chip">Python</span>
+          <span class="chip">Kotlin</span><span class="chip">TypeScript</span><span class="chip">SQL</span>
+          <span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">C</span>
+        </div>
 
         <h3 class="h3">Frameworks / Libraries</h3>
-        <div class="chips" id="skillsFrameworks"></div>
+        <div class="chips">
+          <span class="chip">Spring Boot</span><span class="chip">Spring Security</span><span class="chip">Spring Data JPA</span>
+          <span class="chip">React</span><span class="chip">Vue.js</span><span class="chip">Node.js</span>
+          <span class="chip">Express.js</span><span class="chip">MyBatis</span>
+        </div>
 
         <h3 class="h3">Data / Cloud / Tools</h3>
-        <div class="chips" id="skillsTools"></div>
+        <div class="chips">
+          <span class="chip">PostgreSQL</span><span class="chip">MySQL</span><span class="chip">Redis</span><span class="chip">Hibernate Spatial</span>
+          <span class="chip">AWS</span><span class="chip">Docker</span><span class="chip">CloudWatch</span>
+          <span class="chip">Git</span><span class="chip">JUnit</span><span class="chip">JWT</span>
+        </div>
       </section>
     </section>
 
     <section class="panel reveal panel--projects">
       <h2 class="h2">Projects</h2>
-      <div id="projectsList">
-        <!-- JS will render projects here, keeping same classes -->
-      </div>
+
+      <article class="project">
+        <div class="project__head">
+          <div class="project__title">Twitch Game Web App</div>
+          <div class="project__time">May 2025 – Jun 2025</div>
+        </div>
+        <ul class="ul">
+          <li>Full-stack game streaming web; browse 1000+ Twitch streams/videos/clips via Twitch APIs.</li>
+          <li>Spring Security + MySQL auth with role-based access.</li>
+          <li>50+ JUnit tests; 90%+ coverage; deployed on AWS App Runner + Aurora RDS + ECR.</li>
+        </ul>
+      </article>
+
+      <article class="project">
+        <div class="project__head">
+          <div class="project__title">Food Management & Ordering Web App</div>
+          <div class="project__time">Jul 2024 – Aug 2024</div>
+        </div>
+        <ul class="ul">
+          <li>Spring Boot backend with auth/RBAC + real-time order status.</li>
+          <li>Vue.js admin frontend; clear API contracts for smoother integration.</li>
+          <li>Redis caching + MySQL: reduced DB load ~40%; latency 800ms → 480ms.</li>
+        </ul>
+      </article>
+
+      <article class="project">
+        <div class="project__head">
+          <div class="project__title">BookingHouse Web App</div>
+          <div class="project__time">Jul 2025 – Aug 2025</div>
+        </div>
+        <ul class="ul">
+          <li>Spring Boot + PostgreSQL + Hibernate Spatial for radius-based geo search over 10,000+ records (sub-200ms).</li>
+          <li>React + Ant Design frontend with validation + async flows; RESTful integration via Fetch.</li>
+          <li>JWT stateless auth + booking conflict checks + transaction-safe updates.</li>
+        </ul>
+      </article>
+
+      <article class="project">
+        <div class="project__head">
+          <div class="project__title">EasyAI Web App</div>
+          <div class="project__time">Jun 2025 – Jul 2025</div>
+        </div>
+        <ul class="ul">
+          <li>Java + LangChain RAG assistant on PDFs up to 50MB.</li>
+          <li>Vector indexing pipeline; 90% responses under 2s while keeping relevance.</li>
+          <li>Routing/caching reduced API latency ~40% during peaks; supports voice queries & history.</li>
+        </ul>
+      </article>
     </section>
 
     <footer class="footer reveal">
