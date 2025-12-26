@@ -429,3 +429,16 @@ body{
 .page > section.panel .project__time{
   color: color-mix(in oklab, var(--sec) 35%, rgba(255,255,255,.62) 65%);
 }
+
+.resumeText{
+  white-space: pre-wrap;
+  line-height: 1.65;
+  font-size: 14px;
+  color: rgba(255,255,255,.86);
+  padding: 14px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.14);
+  max-height: 560px;
+  overflow: auto;
+}
