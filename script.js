@@ -3,16 +3,16 @@
 // Source: your carousel HTML :contentReference[oaicite:11]{index=11}
 const sliderData = [
   { url: './images/qishen.jpg', title: '旅行者，快来啊！一起休息一下吧...', color: 'rgb(181, 192, 184)' },
-  { url: './images/wendi.jpg', title: '【温迪】风会带走你的忧虑，也会带来新的故事和冒险~', color: 'rgb(62, 150, 126)' },
-  { url: './images/keqing.jpg', title: '【刻晴】剑光如我,斩尽芜杂!', color: 'rgb(90, 78, 116)' },
-  { url: './images/zhongli.jpg', title: '【钟离】欲买桂花同载酒,只可惜故人何日再见呢？', color: 'rgb(210, 158, 78)' },
-  { url: './images/ganyu.jpg', title: '【甘雨】啊,琉璃百合的味道,真好啊！', color: 'rgb(96, 111, 191)' },
-  { url: './images/leidian.jpg', title: '【影】浮世景色百千年依旧,人之在世却如白露与泡影！', color: 'rgb(153, 119, 217)' },
-  { url: './images/shenzi.jpg', title: '【神子】我的神明，就托付给你了！', color: 'rgb(185, 95, 84)' },
-  { url: './images/naxida.jpg', title: '【纳西妲】你相信草神的存在吗？我曾在梦中见过她', color: 'rgb(130, 148, 124)' },
-  { url: './images/nilu.jpg', title: '【妮露】舞姿娉婷，如睡莲初绽，一尘不染~', color: 'rgb(33, 166, 218)' },
-  { url: './images/funingna.jpg', title: '【芙宁娜】雨露不休，百川奔流!', color: 'rgb(136, 151, 184)' },
-  { url: './images/naweiya.jpg', title: '【娜维娅】和朋友分享的秘密不是更加珍贵吗?', color: 'rgb(202, 159, 116)' }
+  { url: './images/wendi.jpg', title: '风会带走你的忧虑，也会带来新的故事和冒险~', color: 'rgb(62, 150, 126)' },
+  { url: './images/keqing.jpg', title: '剑光如我,斩尽芜杂!', color: 'rgb(90, 78, 116)' },
+  { url: './images/zhongli.jpg', title: '欲买桂花同载酒,只可惜故人何日再见呢？', color: 'rgb(210, 158, 78)' },
+  { url: './images/ganyu.jpg', title: '啊,琉璃百合的味道,真好啊！', color: 'rgb(96, 111, 191)' },
+  { url: './images/leidian.jpg', title: '浮世景色百千年依旧,人之在世却如白露与泡影！', color: 'rgb(153, 119, 217)' },
+  { url: './images/shenzi.jpg', title: '我的神明，就托付给你了！', color: 'rgb(185, 95, 84)' },
+  { url: './images/naxida.jpg', title: '你相信草神的存在吗？我曾在梦中见过她', color: 'rgb(130, 148, 124)' },
+  { url: './images/nilu.jpg', title: '舞姿娉婷，如睡莲初绽，一尘不染~', color: 'rgb(33, 166, 218)' },
+  { url: './images/funingna.jpg', title: '雨露不休，百川奔流!', color: 'rgb(136, 151, 184)' },
+  { url: './images/naweiya.jpg', title: '和朋友分享的秘密不是更加珍贵吗?', color: 'rgb(202, 159, 116)' }
 ];
 
 const bgImg = document.querySelector('.bg__img');
