@@ -1,20 +1,6 @@
 // script.js
 
 // ===== Background Slider Data (EN captions) =====
-const sliderData = [
-  { url: './images/qishen.jpg', title: 'Traveler—come on, take a break with me...', color: 'rgb(181, 192, 184)' },
-  { url: './images/wendi.jpg', title: 'The wind will carry away your worries—and bring new stories and adventures~', color: 'rgb(62, 150, 126)' },
-  { url: './images/keqing.jpg', title: 'My blade is like lightning—cutting through all that stands in the way!', color: 'rgb(90, 78, 116)' },
-  { url: './images/zhongli.jpg', title: 'If only we could drink again beneath the osmanthus... when will old friends meet once more?', color: 'rgb(210, 158, 78)' },
-  { url: './images/ganyu.jpg', title: 'Ah, the scent of Glaze Lilies… wonderful.', color: 'rgb(96, 111, 191)' },
-  { url: './images/leidian.jpg', title: 'The world remains for ages, yet a human life is but dew and a fleeting shadow.', color: 'rgb(153, 119, 217)' },
-  { url: './images/shenzi.jpg', title: 'My god… I’ll leave everything to you!', color: 'rgb(185, 95, 84)' },
-  { url: './images/naxida.jpg', title: 'Do you believe the Dendro Archon exists? I’ve seen her in my dreams.', color: 'rgb(130, 148, 124)' },
-  { url: './images/nilu.jpg', title: 'Graceful steps—like a lotus in bloom, pure and untouched~', color: 'rgb(33, 166, 218)' },
-  { url: './images/funingna.jpg', title: 'Rain never ceases; a hundred rivers surge onward!', color: 'rgb(136, 151, 184)' },
-  { url: './images/naweiya.jpg', title: 'Isn’t a secret shared with friends all the more precious?', color: 'rgb(202, 159, 116)' }
-];
-
 const bgImg = document.querySelector('.bg__img');
 const bgCaption = document.getElementById('bgCaption');
 const prevBtn = document.getElementById('prevBtn');
