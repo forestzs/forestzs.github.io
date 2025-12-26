@@ -23,147 +23,13 @@
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
   // =========================
-  // 3) Accent color from background image -> Resume button
-  // =========================
-  const resumeBtn = document.querySelector(".btn--primary"); // your Resume button
-
-  function clamp(n, a, b) {
-    return Math.max(a, Math.min(b, n));
-  }
-
-  function rgbToHsl(r, g, b) {
-    r /= 255; g /= 255; b /= 255;
-    const max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h, s;
-    const l = (max + min) / 2;
-
-    if (max === min) {
-      h = s = 0;
-    } else {
-      const d = max - min;
-      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      switch (max) {
-        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-        case g: h = (b - r) / d + 2; break;
-        default: h = (r - g) / d + 4; break;
-      }
-      h /= 6;
-    }
-    return { h, s, l };
-  }
-
-  function hslToRgb(h, s, l) {
-    let r, g, b;
-
-    if (s === 0) {
-      r = g = b = l;
-    } else {
-      const hue2rgb = (p, q, t) => {
-        if (t < 0) t += 1;
-        if (t > 1) t -= 1;
-        if (t < 1 / 6) return p + (q - p) * 6 * t;
-        if (t < 1 / 2) return q;
-        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-        return p;
-      };
-      const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-      const p = 2 * l - q;
-      r = hue2rgb(p, q, h + 1 / 3);
-      g = hue2rgb(p, q, h);
-      b = hue2rgb(p, q, h - 1 / 3);
-    }
-
-    return {
-      r: Math.round(r * 255),
-      g: Math.round(g * 255),
-      b: Math.round(b * 255),
-    };
-  }
-
-  function averageColorFromImage(imgEl) {
-    // Downsample for speed
-    const w = 48, h = 48;
-    const canvas = document.createElement("canvas");
-    canvas.width = w;
-    canvas.height = h;
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
-
-    ctx.drawImage(imgEl, 0, 0, w, h);
-    const data = ctx.getImageData(0, 0, w, h).data;
-
-    let r = 0, g = 0, b = 0, cnt = 0;
-
-    for (let i = 0; i < data.length; i += 4) {
-      const a = data[i + 3];
-      if (a < 20) continue;
-
-      const rr = data[i], gg = data[i + 1], bb = data[i + 2];
-
-      // ignore near-white & near-black pixels to get "theme" color
-      const bright = (rr + gg + bb) / 3;
-      if (bright > 245 || bright < 10) continue;
-
-      r += rr; g += gg; b += bb; cnt++;
-    }
-
-    if (!cnt) {
-      // fallback: just average all pixels
-      r = g = b = 0; cnt = 0;
-      for (let i = 0; i < data.length; i += 4) {
-        r += data[i]; g += data[i + 1]; b += data[i + 2];
-        cnt++;
-      }
-    }
-
-    return {
-      r: Math.round(r / cnt),
-      g: Math.round(g / cnt),
-      b: Math.round(b / cnt),
-    };
-  }
-
-  function applyAccentToResumeButton(rgb) {
-    if (!resumeBtn) return;
-
-    // Make it look consistent: slightly boost saturation, clamp lightness
-    const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
-    const tuned = hslToRgb(
-      hsl.h,
-      clamp(hsl.s * 1.15, 0.35, 0.85),
-      clamp(hsl.l, 0.34, 0.55)
-    );
-
-    // update CSS variables (optional but useful)
-    document.documentElement.style.setProperty(
-      "--accent-rgb",
-      `${tuned.r} ${tuned.g} ${tuned.b}`
-    );
-
-    // directly set button style (guaranteed to work)
-    resumeBtn.style.background = `rgba(${tuned.r}, ${tuned.g}, ${tuned.b}, 0.40)`;
-    resumeBtn.style.borderColor = `rgba(${tuned.r}, ${tuned.g}, ${tuned.b}, 0.70)`;
-    resumeBtn.style.boxShadow = `0 10px 30px rgba(${tuned.r}, ${tuned.g}, ${tuned.b}, 0.18)`;
-  }
-
-  function updateAccentFromBgImage(bgImgEl) {
-    try {
-      const rgb = averageColorFromImage(bgImgEl);
-      applyAccentToResumeButton(rgb);
-    } catch (e) {
-      // if canvas fails for any reason, do nothing
-      console.warn("[accent] failed:", e);
-    }
-  }
-
-  // =========================
-  // 4) Background slider (robust)
+  // 3) Background slider (robust)
   // =========================
   const bgImg = $("bgImg");
-  // ✅ 兼容两套 id
-  const bgPrevBtn = $("bgPrevBtn") || $("prevBtn");
-  const bgNextBtn = $("bgNextBtn") || $("nextBtn");
+  const bgPrevBtn = $("bgPrevBtn");
+  const bgNextBtn = $("bgNextBtn");
 
-  // ✅ 你的真实图片
+  // ✅ 改成你仓库 images/ 里真实存在的文件名
   const rawImages = [
     "./images/qishen.jpg",
     "./images/funingna.jpg",
@@ -183,6 +49,10 @@
   let bgTimer = null;
   let bgImages = []; // only valid-loaded images
 
+  function log(...args) {
+    console.log("[bg]", ...args);
+  }
+
   function preloadOne(src) {
     return new Promise((resolve) => {
       const img = new Image();
@@ -198,17 +68,19 @@
     const results = await Promise.all(rawImages.map(preloadOne));
     bgImages = results.filter((r) => r.ok).map((r) => r.src);
 
+    log("preload results:", results);
+    log("valid images:", bgImages);
+
     if (bgImages.length === 0) {
+      // fallback: at least keep current src
       bgImages = [bgImg.getAttribute("src") || "./images/qishen.jpg"];
+      log("fallback to current src only:", bgImages);
     }
 
     // align index to current src if possible
     const cur = bgImg.getAttribute("src") || "";
     const found = bgImages.findIndex((p) => cur.includes(p.replace("./", "")) || cur === p);
     bgIdx = found >= 0 ? found : 0;
-
-    // ensure accent updates even on first load
-    bgImg.addEventListener("load", () => updateAccentFromBgImage(bgImg));
 
     setBg(bgIdx, true);
     startBgAuto();
@@ -220,18 +92,19 @@
     bgIdx = (i + bgImages.length) % bgImages.length;
     const nextSrc = bgImages[bgIdx];
 
+    log("switch ->", bgIdx, nextSrc);
+
     if (immediate) {
       bgImg.style.opacity = "1";
       bgImg.src = nextSrc;
-      // accent will update via load event
       return;
     }
 
+    // fade
     bgImg.style.opacity = "0";
     setTimeout(() => {
       bgImg.src = nextSrc;
       bgImg.style.opacity = "1";
-      // accent will update via load event
     }, 180);
   }
 
@@ -242,13 +115,18 @@
     if (bgTimer) {
       clearInterval(bgTimer);
       bgTimer = null;
+      log("auto stopped");
     }
   }
 
   function startBgAuto() {
     stopBgAuto();
-    if (bgImages.length < 2) return;
+    if (bgImages.length < 2) {
+      log("auto disabled, need >=2 valid images. current =", bgImages.length);
+      return;
+    }
     bgTimer = setInterval(bgNext, intervalMs);
+    log("auto started interval =", intervalMs);
   }
 
   if (bgPrevBtn) {
@@ -256,12 +134,17 @@
       bgPrev();
       startBgAuto();
     });
+  } else {
+    log("bgPrevBtn not found");
   }
+
   if (bgNextBtn) {
     bgNextBtn.addEventListener("click", () => {
       bgNext();
       startBgAuto();
     });
+  } else {
+    log("bgNextBtn not found");
   }
 
   document.addEventListener("visibilitychange", () => {
@@ -270,6 +153,78 @@
   });
 
   initBgImages();
+
+  // =========================
+  // 4) Projects carousel (single card)
+  // =========================
+  const projTitle = $("projTitle");
+  const projTime = $("projTime");
+  const projBullets = $("projBullets");
+  const projPrevBtn = $("projPrevBtn");
+  const projNextBtn = $("projNextBtn");
+
+  const projects = [
+    {
+      title: "Twitch Game Web App",
+      time: "May 2025 – Jun 2025",
+      bullets: [
+        "Full-stack game streaming web; browse 1000+ Twitch streams/videos/clips via Twitch APIs.",
+        "Spring Security + MySQL auth with role-based access.",
+        "50+ JUnit tests; 90%+ coverage; deployed on AWS App Runner + Aurora RDS + ECR.",
+      ],
+    },
+    {
+      title: "Food Management & Ordering Web App",
+      time: "Jul 2024 – Aug 2024",
+      bullets: [
+        "Spring Boot backend with auth/RBAC + real-time order status.",
+        "Vue.js admin frontend; clear API contracts for smoother integration.",
+        "Redis caching + MySQL: reduced DB load ~40%; latency 800ms → 480ms.",
+      ],
+    },
+    {
+      title: "BookingHouse Web App",
+      time: "Jul 2025 – Aug 2025",
+      bullets: [
+        "Spring Boot + PostgreSQL + Hibernate Spatial for radius-based geo search over 10,000+ records (sub-200ms).",
+        "React + Ant Design frontend with validation + async flows; RESTful integration via Fetch.",
+        "JWT stateless auth + booking conflict checks + transaction-safe updates.",
+      ],
+    },
+    {
+      title: "EasyAI Web App",
+      time: "Jun 2025 – Jul 2025",
+      bullets: [
+        "Java + LangChain RAG assistant on PDFs up to 50MB.",
+        "Vector indexing pipeline; 90% responses under 2s while keeping relevance.",
+        "Routing/caching reduced API latency ~40% during peaks; supports voice queries & history.",
+      ],
+    },
+  ];
+
+  let projIdx = 0;
+
+  function renderProject(i) {
+    if (!projTitle || !projTime || !projBullets) return;
+    if (!projects.length) return;
+
+    projIdx = (i + projects.length) % projects.length;
+    const p = projects[projIdx];
+
+    projTitle.textContent = p.title;
+    projTime.textContent = p.time;
+
+    projBullets.innerHTML = "";
+    p.bullets.forEach((b) => {
+      const li = document.createElement("li");
+      li.textContent = b;
+      projBullets.appendChild(li);
+    });
+  }
+
+  if (projPrevBtn) projPrevBtn.addEventListener("click", () => renderProject(projIdx - 1));
+  if (projNextBtn) projNextBtn.addEventListener("click", () => renderProject(projIdx + 1));
+  renderProject(0);
 
   // =========================
   // 5) Calendar (simple)
