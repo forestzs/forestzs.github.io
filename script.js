@@ -178,3 +178,20 @@ calTodayBtn?.addEventListener('click', () => {
 updateCalHeader();
 renderCalendar();
 setInterval(updateCalHeader, 250);
+
+async function loadResumeJson(){
+  const el = document.getElementById('resumeAuto');
+  if (!el) return;
+
+  try{
+    // cache-bust so GitHub Pages
+    const res = await fetch(`./resume.json?ts=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    el.textContent = data.text || '(No text extracted)';
+  }catch(e){
+    console.error(e);
+    el.textContent = 'Failed to load resume.json. Make sure GitHub Actions generated it.';
+  }
+}
+loadResumeJson();
