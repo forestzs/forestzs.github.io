@@ -1,9 +1,9 @@
 {
-  "generated_at": "2025-12-26T08:24:19.744657+00:00",
+  "generated_at": "2025-12-26T08:29:46.318402+00:00",
   "source": "resume.pdf",
   "name": "Zhengshu Zhang",
   "subtitle": "Software Engineer • USC MS Spatial Data Science • Los Angeles",
-  "summary": "",
+  "summary": "University of Southern California Los Angeles, CA Master of Science in Spatial Data Science Jan 2025-Dec 2026(Expected Software engineer backend with",
   "resumeUrl": "./resume.pdf",
   "contact": {
     "phone": "+1 323-916-7934",
@@ -14,17 +14,19 @@
   },
   "education": [
     {
+      "school": ")",
+      "degree": ""
+    },
+    {
       "school": "Sichuan Agricultural University Ya’an, SiChuan",
       "degree": "Bachelor of Engineering in Food Quality and Safety"
     }
   ],
   "projects": [
     {
-      "title": "",
+      "title": "Food Management & Ordering Web App",
       "time": "Sept 2015-June 2019",
-      "bullets": [
-        "Food Management & Ordering Web App"
-      ]
+      "bullets": []
     },
     {
       "title": "",
