@@ -4,49 +4,171 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Zhengshu Zhang</title>
+  <meta name="description" content="Zhengshu Zhang - Software Engineer | USC MS Spatial Data Science" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="card highlight">
-      <h1 class="reveal">Zhengshu Zhang</h1>
-      <div class="sub reveal">USC MS Spatial Data Science • Software Engineer / Data Engineer • Los Angeles</div>
+  <!-- Fullscreen background slider -->
+  <div class="bg" aria-hidden="true">
+    <img class="bg__img" src="./images/qishen.jpg" alt="" />
+    <div class="bg__vignette"></div>
 
-      <div class="row reveal">
-        <a class="btn ripple" href="https://github.com/forestzs" target="_blank" rel="noreferrer">GitHub</a>
-        <a class="btn ripple" href="https://www.linkedin.com/in/zhengshuzhang/" target="_blank" rel="noreferrer">LinkedIn</a>
-        <a class="btn ripple" href="forestzhengshu@gmail.com">Email</a>
-      </div>
+    <div class="bg__hud">
+      <div class="bg__caption" id="bgCaption">旅行者，快来啊！一起休息一下吧...</div>
 
-      <h2 class="reveal">Skills</h2>
-      <div class="reveal">
-        <span class="tag">Java</span>
-        <span class="tag">Spring Boot</span>
-        <span class="tag">React</span>
-        <span class="tag">Ant Design</span>
-        <span class="tag">Python</span>
-        <span class="tag">SQL</span>
-        <span class="tag">GeoPandas</span>
-        <span class="tag">Docker</span>
-      </div>
+      <div class="bg__right">
+        <div class="bg__clock" id="bgClock">
+          <strong id="clockText"></strong>
+        </div>
 
-      <h2 class="reveal" id="projects">Projects</h2>
-      <div class="proj reveal">
-        <b>EasyAI Web App</b> <span class="muted">— RAG / PDF Q&A</span>
-        <div class="muted">LangChain + Vector Search + API + UI.</div>
+        <div class="bg__controls">
+          <button class="icon-btn" id="prevBtn" type="button" aria-label="Previous">‹</button>
+          <button class="icon-btn" id="nextBtn" type="button" aria-label="Next">›</button>
+        </div>
       </div>
-      <div class="proj reveal">
-        <b>Urban Heat Risk Analyzer</b> <span class="muted">— LA spatial analytics</span>
-        <div class="muted">Temperature + canopy + buildings → risk index.</div>
-      </div>
-
-      <h2 class="reveal" id="contact">Contact</h2>
-      <div class="muted reveal">Email me anytime: your_email@example.com</div>
     </div>
   </div>
 
-  <!-- JS -->
+  <!-- Foreground content -->
+  <main class="page">
+    <header class="panel hero reveal">
+      <div class="hero__top">
+        <div>
+          <h1 class="hero__name">Zhengshu Zhang</h1>
+          <p class="hero__subtitle">
+            Software Engineer • USC MS Spatial Data Science • Los Angeles
+          </p>
+        </div>
+
+        <div class="hero__links">
+          <a class="btn" href="https://github.com/forestzs" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="btn" href="https://www.linkedin.com/in/zhengshuzhang/" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a class="btn" href="mailto:forestzhengshu@gmail.com">Email</a>
+          <a class="btn btn--primary" href="./resume.pdf" target="_blank" rel="noreferrer">Resume</a>
+        </div>
+      </div>
+
+      <div class="hero__meta">
+        <span class="meta-chip">+1 323-916-7934</span>
+        <span class="meta-chip">Los Angeles, CA</span>
+        <span class="meta-chip">forestzhengshu@gmail.com</span>
+      </div>
+
+      <p class="hero__summary">
+        Software engineer with experience in full-stack development, cloud deployment, and data-intensive applications.
+        Skilled in Java, Spring Boot, and modern web technologies with expertise in building scalable systems and responsive user interfaces.
+        :contentReference[oaicite:2]{index=2}
+      </p>
+    </header>
+
+    <section class="grid">
+      <section class="panel reveal">
+        <h2 class="h2">Education</h2>
+        <div class="edu">
+          <div class="edu__item">
+            <div class="edu__title">University of Southern California</div>
+            <div class="muted">Master of Science in Spatial Data Science</div>
+          </div>
+          <div class="edu__item">
+            <div class="edu__title">Sichuan Agricultural University</div>
+            <div class="muted">Bachelor of Engineering in Food Quality and Safety</div>
+          </div>
+        </div>
+        <div class="hint">Content from your resume :contentReference[oaicite:3]{index=3}</div>
+      </section>
+
+      <section class="panel reveal">
+        <h2 class="h2">Skills</h2>
+
+        <h3 class="h3">Languages</h3>
+        <div class="chips">
+          <span class="chip">Java</span><span class="chip">JavaScript</span><span class="chip">Python</span>
+          <span class="chip">Kotlin</span><span class="chip">TypeScript</span><span class="chip">SQL</span>
+          <span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">C</span>
+        </div>
+
+        <h3 class="h3">Frameworks / Libraries</h3>
+        <div class="chips">
+          <span class="chip">Spring Boot</span><span class="chip">Spring Security</span><span class="chip">Spring Data JPA</span>
+          <span class="chip">React</span><span class="chip">Vue.js</span><span class="chip">Node.js</span>
+          <span class="chip">Express.js</span><span class="chip">MyBatis</span>
+        </div>
+
+        <h3 class="h3">Data / Cloud / Tools</h3>
+        <div class="chips">
+          <span class="chip">PostgreSQL</span><span class="chip">MySQL</span><span class="chip">Redis</span><span class="chip">Hibernate Spatial</span>
+          <span class="chip">AWS</span><span class="chip">Docker</span><span class="chip">CloudWatch</span>
+          <span class="chip">Git</span><span class="chip">JUnit</span><span class="chip">JWT</span>
+        </div>
+
+        <div class="hint">Skills list is taken from your resume :contentReference[oaicite:4]{index=4}</div>
+      </section>
+    </section>
+
+    <section class="panel reveal">
+      <h2 class="h2">Projects</h2>
+
+      <article class="project">
+        <div class="project__head">
+          <div class="project__title">Twitch Game Web App</div>
+          <div class="project__time">May 2025 – Jun 2025</div>
+        </div>
+        <ul class="ul">
+          <li>Full-stack game streaming web; browse 1000+ Twitch streams/videos/clips via Twitch APIs.</li>
+          <li>Spring Security + MySQL auth with role-based access.</li>
+          <li>50+ JUnit tests; 90%+ coverage; deployed on AWS App Runner + Aurora RDS + ECR.</li>
+        </ul>
+        <div class="hint">Resume source :contentReference[oaicite:5]{index=5}</div>
+      </article>
+
+      <article class="project">
+        <div class="project__head">
+          <div class="project__title">Food Management & Ordering Web App</div>
+          <div class="project__time">Jul 2024 – Aug 2024</div>
+        </div>
+        <ul class="ul">
+          <li>Spring Boot backend with auth/RBAC + real-time order status.</li>
+          <li>Vue.js admin frontend; clear API contracts for smoother integration.</li>
+          <li>Redis caching + MySQL: reduced DB load ~40%; latency 800ms → 480ms.</li>
+        </ul>
+        <div class="hint">Resume source :contentReference[oaicite:6]{index=6}</div>
+      </article>
+
+      <article class="project">
+        <div class="project__head">
+          <div class="project__title">BookingHouse Web App</div>
+          <div class="project__time">Jul 2025 – Aug 2025</div>
+        </div>
+        <ul class="ul">
+          <li>Spring Boot + PostgreSQL + Hibernate Spatial for radius-based geo search over 10,000+ records (sub-200ms).</li>
+          <li>React + Ant Design frontend with validation + async flows; RESTful integration via Fetch.</li>
+          <li>JWT stateless auth + booking conflict checks + transaction-safe updates.</li>
+        </ul>
+        <div class="hint">Resume source :contentReference[oaicite:7]{index=7}</div>
+      </article>
+
+      <article class="project">
+        <div class="project__head">
+          <div class="project__title">EasyAI Web App</div>
+          <div class="project__time">Jun 2025 – Jul 2025</div>
+        </div>
+        <ul class="ul">
+          <li>Java + LangChain RAG assistant on PDFs up to 50MB.</li>
+          <li>Vector indexing pipeline; 90% responses under 2s while keeping relevance.</li>
+          <li>Routing/caching reduced API latency ~40% during peaks; supports voice queries & history.</li>
+        </ul>
+        <div class="hint">Resume source :contentReference[oaicite:8]{index=8}</div>
+      </article>
+    </section>
+
+    <footer class="footer reveal">
+      <div class="muted">
+        © <span id="year"></span> Zhengshu Zhang • Built with GitHub Pages
+      </div>
+    </footer>
+  </main>
+
   <script src="./script.js"></script>
 </body>
 </html>
