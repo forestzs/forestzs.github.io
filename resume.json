@@ -1,5 +1,5 @@
 {
-  "generated_at": "2025-12-26T07:43:46.265397+00:00",
+  "generated_at": "2025-12-26T07:53:06.511230+00:00",
   "source": "resume.pdf",
   "name": "ZhengshuZhang",
   "subtitle": "Software Engineer • USC MS Spatial Data Science • Los Angeles",
@@ -9,12 +9,12 @@
     "phone": "+1323-916-7934",
     "email": "forestzhengshu@gmail.com",
     "linkedin": "https://www.linkedin.com/in/zhengshuzhang/",
-    "github": "https://github.com/forestzs",
+    "github": "",
     "location": "LosAngeles,CA,90007"
   },
   "education": [
     {
-      "school": "University",
+      "school": "University ofSouthern California LosAngeles, CA",
       "degree": "Master of Science in SpatialData Science Jan 2025-Dec 2026(Expected)"
     },
     {
