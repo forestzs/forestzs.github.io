@@ -1,216 +1,488 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Zhengshu Zhang</title>
-  <meta name="description" content="Zhengshu Zhang - Software Engineer | USC MS Spatial Data Science" />
-  <link rel="stylesheet" href="./styles.css" />
-</head>
+:root{
+  --accent: rgb(181, 192, 184);
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.72);
+  --panel: rgba(10, 10, 12, .52);
+  --panelBorder: rgba(255,255,255,.14);
+  --shadow: 0 18px 60px rgba(0,0,0,.45);
+}
 
-<body>
-  <!-- Fullscreen background slider -->
-  <div class="bg" aria-hidden="true">
-    <img class="bg__img" id="bgImg" src="./images/qishen.jpg" alt="" />
-    <div class="bg__vignette"></div>
-  </div>
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
 
-  <!-- Fixed bottom-right slider controls (OUTSIDE .bg) -->
-  <div class="bg__controlsFixed" aria-label="Background controls">
-    <button class="icon-btn" id="prevBtn" type="button" aria-label="Previous background">‹</button>
-    <button class="icon-btn" id="nextBtn" type="button" aria-label="Next background">›</button>
-  </div>
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  color: var(--text);
+  background:#000;
+  overflow-x:hidden;
+}
 
-  <!-- Top-right Calendar Widget (EN) -->
-  <div class="cal" id="calWidget">
-    <div class="cal__top">
-      <div>
-        <div class="cal__time" id="calTime">--:--:--</div>
-        <div class="cal__date" id="calDate">---, --- --, ----</div>
-        <div class="cal__sub" id="calSub"></div>
-      </div>
+/* =========================
+   Background
+   ========================= */
+.bg{
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
 
-      <div class="cal__nav">
-        <button class="cal__btn" id="calPrev" aria-label="Previous month" type="button">‹</button>
-        <button class="cal__btn" id="calNext" aria-label="Next month" type="button">›</button>
-      </div>
-    </div>
+.bg__img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit: cover;
+  transform: scale(1.04);
+  filter: brightness(.75) contrast(1.05) saturate(1.08);
+  transition: opacity .35s ease, transform 3s ease;
+}
 
-    <div class="cal__monthRow">
-      <div class="cal__month" id="calMonth">----</div>
-      <button class="cal__today" id="calToday" type="button">Today</button>
-    </div>
+.bg__vignette{
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(80% 60% at 30% 10%, rgba(255,255,255,.08), rgba(0,0,0,0) 60%),
+    linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.55) 55%, rgba(0,0,0,.72));
+  pointer-events: none;
+}
 
-    <div class="cal__dow">
-      <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
-    </div>
+/* Fixed controls: always clickable */
+.bg__controlsFixed{
+  position: fixed;
+  right: 24px;
+  bottom: 20px;
+  display:flex;
+  gap:10px;
+  z-index: 2147483647;
+  pointer-events: auto;
+}
 
-    <div class="cal__grid" id="calGrid"></div>
-  </div>
+/* Arrow button */
+.icon-btn{
+  width:44px;
+  height:44px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.18);
+  color: rgba(255,255,255,.92);
+  font-size: 26px;
+  line-height: 44px;
+  cursor:pointer;
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
+}
+.icon-btn:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--accent) 70%, rgba(255,255,255,.2));
+  background: rgba(0,0,0,.28);
+}
 
-  <!-- Foreground content -->
-  <main class="page">
-    <header class="panel hero reveal panel--hero">
-      <div class="hero__top">
-        <div>
-          <h1 class="hero__name">Zhengshu Zhang</h1>
-          <p class="hero__subtitle">
-            Software Engineer • USC MS Spatial Data Science • Los Angeles
-          </p>
-        </div>
+/* =========================
+   Calendar (Top-right)
+   ========================= */
+.cal{
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  width: min(360px, calc(100vw - 36px));
+  z-index: 99998;
+  color: rgba(255,255,255,.92);
+  background: rgba(10, 10, 12, .55);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+  padding: 14px 14px 12px;
+  pointer-events: auto;
+}
 
-        <div class="hero__links">
-          <a class="btn" href="https://github.com/forestzs" target="_blank" rel="noreferrer">GitHub</a>
-          <a class="btn" href="https://www.linkedin.com/in/zhengshuzhang/" target="_blank" rel="noreferrer">LinkedIn</a>
-          <!-- Email removed -->
-          <a class="btn btn--primary" href="./resume.pdf" target="_blank" rel="noreferrer">Resume</a>
-        </div>
-      </div>
+.cal__top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
 
-      <div class="hero__meta">
-        <span class="meta-chip">+1 323-916-7934</span>
-        <span class="meta-chip">Los Angeles, CA</span>
-        <span class="meta-chip">forestzhengshu@gmail.com</span>
-      </div>
+.cal__time{
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: .3px;
+  line-height: 1.05;
+}
 
-      <p class="hero__summary">
-        Software engineer with experience in full-stack development, cloud deployment, and data-intensive applications.
-        Skilled in Java, Spring Boot, and modern web technologies with expertise in building scalable systems and responsive user interfaces.
-      </p>
-    </header>
+.cal__date{
+  margin-top: 4px;
+  font-size: 14px;
+  color: rgba(255,255,255,.78);
+}
 
-    <section class="grid">
-      <section class="panel reveal panel--edu">
-        <h2 class="h2">Education</h2>
+/* hide this line (Local time • Click a date...) */
+.cal__sub{
+  display:none;
+}
 
-        <div class="edu">
-          <div class="edu__item">
-            <div class="edu__title">University of Southern California</div>
-            <div class="muted">Master of Science in Spatial Data Science</div>
+.cal__nav{
+  display:flex;
+  gap:8px;
+}
 
-            <div class="edu__courses">
-              <div class="edu__coursesTitle">Related Courses</div>
-              <div class="chips chips--tight">
-                <span class="chip chip--sm">Spatial Data Science</span>
-                <span class="chip chip--sm">Intro to Computational Thinking</span>
-                <span class="chip chip--sm">GIS Programming</span>
-                <span class="chip chip--sm">Programming for Data Science</span>
-                <span class="chip chip--sm">Data Science at Scale</span>
-              </div>
-            </div>
-          </div>
+.cal__btn{
+  width: 36px;
+  height: 36px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.18);
+  color: rgba(255,255,255,.92);
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 34px;
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
+}
+.cal__btn:hover{
+  transform: translateY(-1px);
+  background: rgba(0,0,0,.28);
+  border-color: rgba(255,255,255,.28);
+}
 
-          <div class="edu__item">
-            <div class="edu__title">Sichuan Agricultural University</div>
-            <div class="muted">Bachelor of Engineering in Food Quality and Safety</div>
+.cal__monthRow{
+  margin-top: 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
 
-            <div class="edu__courses">
-              <div class="edu__coursesTitle">Related Courses</div>
-              <div class="chips chips--tight">
-                <span class="chip chip--sm">C Programming</span>
-                <span class="chip chip--sm">Intro to Information Science &amp; Technology</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+.cal__month{
+  font-weight: 750;
+  color: rgba(255,255,255,.92);
+}
 
-      <section class="panel reveal panel--skills">
-        <h2 class="h2">Skills</h2>
+.cal__today{
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.16);
+  color: rgba(255,255,255,.86);
+  border-radius: 999px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background .12s ease, border-color .12s ease;
+}
+.cal__today:hover{
+  background: rgba(0,0,0,.26);
+  border-color: rgba(255,255,255,.26);
+}
 
-        <h3 class="h3">Languages</h3>
-        <div class="chips">
-          <span class="chip">Java</span><span class="chip">JavaScript</span><span class="chip">Python</span>
-          <span class="chip">Kotlin</span><span class="chip">TypeScript</span><span class="chip">SQL</span>
-          <span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">C</span>
-        </div>
+.cal__dow{
+  margin-top: 10px;
+  display:grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  color: rgba(255,255,255,.62);
+  font-size: 12px;
+  user-select:none;
+}
+.cal__dow span{
+  display:flex;
+  justify-content:center;
+  padding: 6px 0;
+}
 
-        <h3 class="h3">Frameworks / Libraries</h3>
-        <div class="chips">
-          <span class="chip">Spring Boot</span><span class="chip">Spring Security</span><span class="chip">Spring Data JPA</span>
-          <span class="chip">React</span><span class="chip">Vue.js</span><span class="chip">Node.js</span>
-          <span class="chip">Express.js</span><span class="chip">MyBatis</span>
-        </div>
+.cal__grid{
+  margin-top: 8px;
+  display:grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
 
-        <h3 class="h3">Data / Cloud / Tools</h3>
-        <div class="chips">
-          <span class="chip">PostgreSQL</span><span class="chip">MySQL</span><span class="chip">Redis</span><span class="chip">Hibernate Spatial</span>
-          <span class="chip">AWS</span><span class="chip">Docker</span><span class="chip">CloudWatch</span>
-          <span class="chip">Git</span><span class="chip">JUnit</span><span class="chip">JWT</span>
-        </div>
-      </section>
-    </section>
+.cal__cell{
+  height: 34px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.10);
+  color: rgba(255,255,255,.86);
+  cursor: pointer;
+  transition: transform .1s ease, background .1s ease, border-color .1s ease;
+}
+.cal__cell:hover{
+  transform: translateY(-1px);
+  background: rgba(0,0,0,.22);
+  border-color: rgba(255,255,255,.22);
+}
 
-    <!-- Projects: single card + left/right nav -->
-    <section class="panel reveal panel--projects">
-      <div class="sectionHead">
-        <h2 class="h2">Projects</h2>
+.cal__cell.is-other{ opacity: .45; }
+.cal__cell.is-today{ border-color: rgba(255,255,255,.28); }
+.cal__cell.is-selected{
+  background: color-mix(in oklab, var(--accent) 60%, rgba(0,0,0,.22));
+  border-color: color-mix(in oklab, var(--accent) 80%, rgba(255,255,255,.14));
+}
 
-        <div class="projNav" aria-label="Project carousel controls">
-          <button class="icon-btn icon-btn--sm" id="projPrev" type="button" aria-label="Previous project">‹</button>
-          <div class="projCounter" id="projCounter" aria-live="polite">1 / 4</div>
-          <button class="icon-btn icon-btn--sm" id="projNext" type="button" aria-label="Next project">›</button>
-        </div>
-      </div>
+@media (max-width: 720px){
+  .cal{ top: 12px; right: 12px; border-radius: 18px; }
+  .cal__time{ font-size: 30px; }
+}
 
-      <div class="projCarousel" id="projCarousel">
-        <article class="project projItem">
-          <div class="project__head">
-            <div class="project__title">Twitch Game Web App</div>
-            <div class="project__time">May 2025 – Jun 2025</div>
-          </div>
-          <ul class="ul">
-            <li>Full-stack game streaming web; browse 1000+ Twitch streams/videos/clips via Twitch APIs.</li>
-            <li>Spring Security + MySQL auth with role-based access.</li>
-            <li>50+ JUnit tests; 90%+ coverage; deployed on AWS App Runner + Aurora RDS + ECR.</li>
-          </ul>
-        </article>
+/* =========================
+   Foreground layout
+   ========================= */
+.page{
+  width: min(1040px, calc(100% - 28px));
+  margin: 36px auto 60px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  position:relative;
+  z-index:1;
+}
 
-        <article class="project projItem">
-          <div class="project__head">
-            <div class="project__title">Food Management &amp; Ordering Web App</div>
-            <div class="project__time">Jul 2024 – Aug 2024</div>
-          </div>
-          <ul class="ul">
-            <li>Spring Boot backend with auth/RBAC + real-time order status.</li>
-            <li>Vue.js admin frontend; clear API contracts for smoother integration.</li>
-            <li>Redis caching + MySQL: reduced DB load ~40%; latency 800ms → 480ms.</li>
-          </ul>
-        </article>
+.panel{
+  background: var(--panel);
+  border: 1px solid var(--panelBorder);
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
 
-        <article class="project projItem">
-          <div class="project__head">
-            <div class="project__title">BookingHouse Web App</div>
-            <div class="project__time">Jul 2025 – Aug 2025</div>
-          </div>
-          <ul class="ul">
-            <li>Spring Boot + PostgreSQL + Hibernate Spatial for radius-based geo search over 10,000+ records (sub-200ms).</li>
-            <li>React + Ant Design frontend with validation + async flows; RESTful integration via Fetch.</li>
-            <li>JWT stateless auth + booking conflict checks + transaction-safe updates.</li>
-          </ul>
-        </article>
+.hero__top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
 
-        <article class="project projItem">
-          <div class="project__head">
-            <div class="project__title">EasyAI Web App</div>
-            <div class="project__time">Jun 2025 – Jul 2025</div>
-          </div>
-          <ul class="ul">
-            <li>Java + LangChain RAG assistant on PDFs up to 50MB.</li>
-            <li>Vector indexing pipeline; 90% responses under 2s while keeping relevance.</li>
-            <li>Routing/caching reduced API latency ~40% during peaks; supports voice queries &amp; history.</li>
-          </ul>
-        </article>
-      </div>
-    </section>
+.hero__name{
+  margin:0;
+  font-size: clamp(34px, 4vw, 54px);
+  letter-spacing: -0.5px;
+}
 
-    <footer class="footer reveal">
-      <div class="muted">
-        © <span id="year"></span> Zhengshu Zhang • Built with GitHub Pages
-      </div>
-    </footer>
-  </main>
+.hero__subtitle{
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 16px;
+}
 
-  <script src="./script.js"></script>
-</body>
-</html>
+.hero__links{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  color: var(--text);
+  text-decoration:none;
+  background: rgba(0,0,0,.14);
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
+}
+.btn:hover{
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--accent) 70%, rgba(255,255,255,.2));
+  background: rgba(0,0,0,.24);
+}
+.btn--primary{
+  background: color-mix(in oklab, var(--accent) 55%, rgba(0,0,0,.35));
+  border-color: color-mix(in oklab, var(--accent) 75%, rgba(255,255,255,.18));
+}
+
+.hero__meta{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+
+.meta-chip{
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  color: var(--muted);
+  background: rgba(0,0,0,.12);
+}
+
+.hero__summary{
+  margin: 14px 0 0;
+  color: rgba(255,255,255,.84);
+  line-height: 1.6;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:18px;
+}
+@media (max-width: 860px){
+  .grid{ grid-template-columns: 1fr; }
+}
+
+.h2{ margin: 0 0 10px; font-size: 22px; }
+.h3{ margin: 14px 0 8px; font-size: 14px; color: var(--muted); letter-spacing:.2px; }
+
+.chips{ display:flex; flex-wrap:wrap; gap:10px; }
+.chip{
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.12);
+  color: rgba(255,255,255,.86);
+}
+
+/* Education additions */
+.edu{ display:flex; flex-direction:column; gap:16px; }
+.edu__title{ font-weight: 650; }
+.muted{ color: var(--muted); }
+
+.edu__courses{
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,.10);
+}
+.edu__coursesTitle{
+  font-size: 12px;
+  color: rgba(255,255,255,.62);
+  letter-spacing: .2px;
+  margin-bottom: 8px;
+}
+.chips--tight{ gap:8px; }
+.chip--sm{
+  padding:6px 10px;
+  font-size: 12.5px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.10);
+}
+
+.project{
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.12);
+  padding: 16px;
+  margin-top: 12px;
+}
+.project__head{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.project__title{ font-weight: 750; font-size: 18px; }
+.project__time{ color: rgba(255,255,255,.62); font-size: 13px; }
+
+.ul{
+  margin: 10px 0 0;
+  padding-left: 18px;
+  color: rgba(255,255,255,.84);
+  line-height: 1.55;
+}
+
+.footer{
+  padding: 10px 2px;
+  text-align:center;
+}
+
+/* Reveal animation */
+.reveal{
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.reveal.is-in{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal{ transition:none; }
+  .bg__img{ transition:none; }
+  .btn,.icon-btn,.cal__btn,.cal__cell{ transition:none; }
+}
+
+/* ============================================================
+   Resume section typography colors
+   ============================================================ */
+.page .panel{ --sec: rgba(210,210,210,.9); }
+.page .panel.hero{ --sec: rgb(170, 205, 255); }                 /* soft blue */
+.page .grid > .panel:nth-child(1){ --sec: rgb(145, 225, 200); } /* mint */
+.page .grid > .panel:nth-child(2){ --sec: rgb(245, 205, 140); } /* warm amber */
+.page > section.panel{ --sec: rgb(205, 170, 255); }             /* soft purple */
+
+.page .panel .h2{
+  color: color-mix(in oklab, var(--sec) 72%, rgba(255,255,255,.92) 28%);
+}
+.page .panel .h3{
+  color: color-mix(in oklab, var(--sec) 48%, rgba(255,255,255,.70) 52%);
+}
+.page .panel .muted{
+  color: color-mix(in oklab, var(--sec) 28%, rgba(255,255,255,.70) 72%);
+}
+.page .panel .hero__subtitle{
+  color: color-mix(in oklab, var(--sec) 26%, rgba(255,255,255,.72) 74%);
+}
+.page .panel .hero__summary,
+.page .panel .ul{
+  color: color-mix(in oklab, var(--sec) 18%, rgba(255,255,255,.86) 82%);
+}
+.page .panel .chip,
+.page .panel .meta-chip{
+  color: color-mix(in oklab, var(--sec) 35%, rgba(255,255,255,.82) 65%);
+  border-color: color-mix(in oklab, var(--sec) 42%, rgba(255,255,255,.16) 58%);
+}
+.page .panel .ul li::marker{
+  color: color-mix(in oklab, var(--sec) 70%, rgba(255,255,255,.45) 30%);
+}
+.page > section.panel .project__title{
+  color: color-mix(in oklab, var(--sec) 62%, rgba(255,255,255,.92) 38%);
+}
+.page > section.panel .project__time{
+  color: color-mix(in oklab, var(--sec) 35%, rgba(255,255,255,.62) 65%);
+}
+
+/* =========================
+   Projects carousel
+   ========================= */
+.sectionHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.projNav{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.icon-btn--sm{
+  width:36px;
+  height:36px;
+  line-height:36px;
+  font-size:22px;
+  border-radius:14px;
+}
+
+.projCounter{
+  min-width:72px;
+  text-align:center;
+  font-size:13px;
+  color: rgba(255,255,255,.72);
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.12);
+}
+
+.projCarousel .projItem{ display:none; }
+.projCarousel .projItem.is-active{ display:block; }
+
+@media (max-width: 520px){
+  .projCounter{ min-width: 64px; }
+}
