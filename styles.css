@@ -55,7 +55,7 @@ body{
   justify-content:space-between;
   gap:16px;
   pointer-events:auto;
-  z-index: 9999;         
+  z-index: 9999;   
 }
 
 .bg__caption{
@@ -110,10 +110,6 @@ body{
   transform: translateY(-1px);
   border-color: color-mix(in oklab, var(--accent) 70%, rgba(255,255,255,.2));
   background: rgba(0,0,0,.28);
-}
-
-.bg__controls, .bg__controls *{
-  pointer-events: auto;
 }
 
 /* ===== Foreground layout ===== */
