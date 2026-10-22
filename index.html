@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zhengshu Zhang</title>
+<link rel="canonical" href="https://sites.google.com/view/zhengshuzhang/">
+<meta name="description" content="Zhengshu Zhang, M.S. student in Spatial Data Science at USC. World models, planning, and multi-robot motion planning.">
+<style>
+  @font-face{font-family:"Source Serif 4";src:url("fonts/source-serif-4-latin-wght-normal.woff2") format("woff2");font-weight:200 900;font-style:normal;font-display:swap}
+  @font-face{font-family:"Source Serif 4";src:url("fonts/source-serif-4-latin-wght-italic.woff2") format("woff2");font-weight:200 900;font-style:italic;font-display:swap}
+
+  :root{
+    --bg:#fcfbf8; --ink:#17191c; --body:#3a3d42; --muted:#6a6e75; --faint:#9a9ea5;
+    --rule:#e4e0d8; --card:#ffffff; --accent:#0f6e63; --accent-soft:#e6f1ee;
+    --max:1180px; --gutter:32px;
+    --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:var(--accent)}
+  a:hover{color:var(--accent)}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+  h2,h3,h4{font-family:var(--serif);font-weight:600;letter-spacing:-.005em}
+  h2{font-size:34px;line-height:1.2;margin:0 0 32px}
+  h3{font-size:24px;line-height:1.3;margin:0 0 20px}
+  p{margin:0 0 16px}
+
+  /* top bar */
+  .top{border-bottom:1px solid var(--rule);background:var(--bg)}
+  .top .wrap{display:flex;align-items:center;justify-content:space-between;height:76px}
+  .brand{font-family:var(--serif);font-size:22px;font-weight:600;display:flex;align-items:center;gap:12px}
+  .brand i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+  .brand span{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  nav a{text-decoration:none;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-left:30px}
+  nav a:hover{color:var(--accent)}
+
+  /* labeled-rule section header */
+  .sechead{display:flex;align-items:center;gap:18px;padding-top:88px;margin-bottom:48px}
+  .sechead .num{font-family:var(--serif);font-size:15px;color:var(--accent)}
+  .sechead .label{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink)}
+  .sechead .line{flex:1;height:1px;background:var(--rule)}
+  .sechead .desc{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--muted)}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:72px;align-items:start}
+  .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
+  .name{font-family:var(--serif);font-weight:600;font-size:clamp(44px,5.6vw,72px);line-height:1.05;letter-spacing:-.015em;margin:0 0 24px;white-space:nowrap}
+  .lede{font-family:var(--serif);font-style:italic;font-size:21px;line-height:1.45;color:var(--muted);margin:0 0 30px;max-width:620px}
+  .intro{font-size:19px;line-height:1.55;color:var(--ink);margin-bottom:18px;max-width:640px}
+  .bio{font-size:16.5px;line-height:1.7;color:var(--body);max-width:640px}
+  .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+  .pill{display:inline-block;border:1px solid var(--ink);border-radius:999px;padding:9px 18px;font-size:14px;text-decoration:none;color:var(--ink);background:transparent}
+  .pill:hover{border-color:var(--accent);color:var(--accent)}
+  .pill.solid{background:var(--ink);color:#fff}
+  .pill.solid:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+  figure{margin:0}
+  .portrait img{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:14px}
+  .portrait figcaption{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+
+  /* timeline lists (education, experience) */
+  .block{padding-top:84px}
+  .tl{border-top:1px solid var(--rule)}
+  .tl .row{display:grid;grid-template-columns:200px 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+  .tl .when{font-size:13px;color:var(--muted);padding-top:5px}
+  .tl h4{font-size:20px;margin:0 0 6px;line-height:1.3}
+  .tl p{font-size:15px;color:var(--muted);margin:0 0 4px;line-height:1.5}
+  .tl p.role{color:var(--body)}
+
+  /* work in motion */
+  .motion{padding-top:92px}
+  .motion .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+  .motion h2{margin:0}
+  .control{font-family:var(--sans);font-size:13px;color:var(--ink);background:transparent;border:1px solid var(--rule);border-radius:999px;padding:7px 14px;cursor:pointer}
+  .control:hover{border-color:var(--accent);color:var(--accent)}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+  .media{position:relative;background:var(--card);border:1px solid var(--rule);border-radius:14px;overflow:hidden;aspect-ratio:5/4;padding:46px 12px 12px}
+  .media video,.media img{display:block;width:100%;height:100%;object-fit:contain}
+  .chip{position:absolute;left:14px;top:13px;background:var(--accent-soft);color:var(--accent);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:5px 9px;border-radius:999px}
+  .card .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+  .card h4{font-size:24px;margin:0 0 10px;line-height:1.3}
+  .card p{font-size:15.5px;color:var(--body);line-height:1.6;margin-bottom:12px}
+  .card .links{font-size:14.5px}
+  .card .links a{text-decoration:none;color:var(--accent)}
+  .card .links a:hover{text-decoration:underline}
+  .card .links span{color:var(--faint);margin:0 8px}
+
+  /* research */
+  .headline{font-family:var(--serif);font-weight:600;font-size:clamp(34px,4.2vw,52px);line-height:1.12;letter-spacing:-.015em;margin:0 0 36px;max-width:900px}
+  .leadgrid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;padding-bottom:12px}
+  .lead{font-family:var(--serif);font-size:21px;line-height:1.45;margin:0}
+  .leadgrid p.sub{font-size:16px;color:var(--body);line-height:1.65;margin:0}
+  .essay{margin-top:56px;max-width:760px;border-left:2px solid var(--accent-soft);padding-left:28px}
+  .essay p{font-size:16px;color:var(--body);line-height:1.75}
+
+  /* publications */
+  .pubs{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+  .pub{display:grid;grid-template-columns:200px 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+  .pub .tag{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-top:6px}
+  .pub h4{font-size:19px;margin:0 0 6px;line-height:1.35}
+  .pub p{font-size:15px;color:var(--muted);margin:0 0 4px;line-height:1.5}
+  .pub .me{color:var(--ink)}
+  .pub .where a{text-decoration:none;color:var(--accent)}
+  .pub .where a:hover{text-decoration:underline}
+
+  /* contact + footer */
+  .contact .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .contact .loc{font-size:15px;color:var(--muted);margin-left:8px}
+  footer{margin-top:110px;border-top:1px solid var(--rule);padding:26px 0 48px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  @media (max-width:980px){
+    .hero{grid-template-columns:1fr;gap:40px}
+    .portrait{max-width:420px}
+    .name{white-space:normal}
+    .cards{grid-template-columns:1fr}
+    .leadgrid{grid-template-columns:1fr;gap:16px}
+    .tl .row,.pub{grid-template-columns:150px 1fr;gap:18px}
+  }
+  @media (max-width:620px){
+    :root{--gutter:20px}
+    .top .wrap{height:auto;padding:14px 20px;flex-direction:column;align-items:flex-start;gap:10px}
+    nav a{margin:0 16px 0 0}
+    .sechead{padding-top:56px;margin-bottom:32px;flex-wrap:wrap}
+    .sechead .desc{width:100%;margin-top:-6px}
+    .block,.motion{padding-top:56px}
+    .tl .row,.pub{grid-template-columns:1fr;gap:6px}
+    .intro{font-size:18px}
+    .essay{padding-left:18px}
+    footer{margin-top:72px}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">Zhengshu Zhang<i></i><span>USC</span></div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#experience">Experience</a>
+      <a href="#publications">Publications</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- 01 About -->
+  <section id="about" class="wrap">
+    <div class="sechead">
+      <span class="num">01</span><span class="label">About</span><span class="line"></span>
+      <span class="desc">World models &middot; planning &middot; robots</span>
+    </div>
+
+    <div class="hero">
+      <div>
+        <div class="eyebrow">USC &middot; Spatial Data Science &middot; M.S., expected Dec 2026</div>
+        <h1 class="name">Zhengshu Zhang</h1>
+        <p class="lede">My research asks when a learned world model genuinely supports robot planning, and how to tell when it only appears to.</p>
+        <p class="intro">I&rsquo;m a master&rsquo;s student in Spatial Data Science at the University of Southern California, graduating in December 2026, and I am applying for PhD study beginning Fall 2027.</p>
+        <p class="bio">I work with <a href="https://ebiyik.github.io/">Erdem Bıyık</a> at USC Viterbi on multi-robot motion planning, and with <a href="https://lizhyun.github.io/">Zhiyuan Li</a> at Aalto University on world models. One line repairs multi-robot trajectories that have become infeasible, without planning them again from scratch. The other audits whether a learned model&rsquo;s ranking of candidate actions can be trusted. With <a href="https://sites.usc.edu/itayhen/">Itay Hen</a> at USC&rsquo;s Information Sciences Institute and <a href="https://dornsife.usc.edu/spatial/profile/siqin-sisi-wang/">Siqin Wang</a> at the Spatial Sciences Institute, I have worked on graph algorithms for planning, from route search on transit networks to tree covers for spin-glass optimization.</p>
+      </div>
+      <figure class="portrait">
+        <img src="media/portrait.jpg" alt="Zhengshu Zhang" width="1000" height="1000">
+        <figcaption>Zhengshu Zhang &middot; Los Angeles</figcaption>
+      </figure>
+    </div>
+
+    <!-- Education -->
+    <div class="block">
+      <h2>Education</h2>
+      <div class="tl">
+        <div class="row">
+          <div class="when">2025 &ndash; 2026 (expected)</div>
+          <div>
+            <h4>University of Southern California</h4>
+            <p class="role">M.S. &middot; Spatial Data Science</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">2015 &ndash; 2019</div>
+          <div>
+            <h4>Sichuan Agricultural University</h4>
+            <p class="role">B.Eng. &middot; Food Quality and Safety</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Experience -->
+    <div id="experience" class="block">
+      <h2>Experience</h2>
+      <div class="tl">
+        <div class="row">
+          <div class="when">Jul 2026 &ndash; present</div>
+          <div>
+            <h4>USC Viterbi School of Engineering</h4>
+            <p class="role">Volunteer Researcher &middot; with Erdem Bıyık</p>
+            <p>Multi-robot motion planning: repairing infeasible trajectories without re-planning.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">Jan 2026 &ndash; present</div>
+          <div>
+            <h4>USC Spatial Sciences Institute</h4>
+            <p class="role">Research Assistant &middot; with Siqin Wang</p>
+            <p>Route retrieval on transit networks and one-year-ahead wildfire forecasting.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">Jan &ndash; Aug 2026</div>
+          <div>
+            <h4>USC Information Sciences Institute</h4>
+            <p class="role">Research Assistant &middot; with Itay Hen</p>
+            <p>Tree covers for spin-glass optimization.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="when">Sep 2026 &ndash; present</div>
+          <div>
+            <h4>USC Spatial Sciences Institute</h4>
+            <p class="role">Course Grader &middot; with Yi Qi</p>
+            <p>Spatial Data Science.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- In motion -->
+    <div class="motion">
+      <div class="head">
+        <h2>What the work looks like.</h2>
+        <button class="control" id="toggle" type="button">Pause replay</button>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <div class="media">
+            <video id="replay" autoplay muted loop playsinline preload="metadata" poster="media/clutter.jpg">
+              <source src="media/clutter.mp4" type="video/mp4">
+            </video>
+            <span class="chip">Solver replay &middot; RIFT</span>
+          </div>
+          <div class="kicker">Multi-robot motion planning</div>
+          <h4>Repair, not replan.</h4>
+          <p>Robots cross a cluttered map. When their trajectories conflict, RIFT deforms them locally instead of planning again, and every endpoint stays fixed.</p>
+          <div class="links"><a href="media/clutter.mp4">Watch the replay &rarr;</a><span>&middot;</span>Paper in preparation</div>
+        </div>
+        <div class="card">
+          <div class="media">
+            <img src="media/arcbench_panel_a.png" alt="PointMaze example from ARC-Bench: the sequence ranked first by the model misses the goal; a lower-ranked sequence reaches it" width="1403" height="1122">
+            <span class="chip">ARC-Bench &middot; PointMaze</span>
+          </div>
+          <div class="kicker">World-model audit</div>
+          <h4>Ranked first, and wrong.</h4>
+          <p>Two action sequences from the same search. The world model ranks the one that misses the goal above the one that reaches it. ARC-Bench measures how often that happens, with the candidates fixed before the model runs.</p>
+          <div class="links"><a href="https://arxiv.org/abs/2609.05461">Read the paper on arXiv &rarr;</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Research -->
+  <section id="research" class="wrap">
+    <div class="sechead">
+      <span class="num">02</span><span class="label">Research</span><span class="line"></span>
+      <span class="desc">From audits to repair</span>
+    </div>
+    <h2 class="headline">The score has to earn the plan.</h2>
+    <div class="leadgrid">
+      <p class="lead">My work connects world-model evaluation, physical diagnosis, and multi-robot planning.</p>
+      <p class="sub">A learned model scores candidate actions and a planner acts on the score. I measure whether the score picks the right candidate before the planner is allowed to trust it, and I build planners that repair a plan instead of discarding it.</p>
+    </div>
+
+    <div class="essay">
+      <h3>How I think about planning with learned models</h3>
+      <p>Most of my work starts from one habit. Before a planner is allowed to act on a learned score, I ask whether the score would have picked the right candidate on its own. A planner that searches and replans can succeed even when the model underneath it is wrong, so success alone does not answer the question.</p>
+      <p>ARC-Bench, with Zhiyuan Li at Aalto University, asks it of latent world models. The candidate action sequences are fixed before the model runs, so the model&rsquo;s ranking is measured apart from the planner&rsquo;s search. On the released JEPA-WM checkpoints the top-scored candidate is suboptimal on 96.8% of Push-T anchors. Closed-loop replanning hides this: forcing the planner to commit to longer open-loop blocks drops PointMaze success from 89.6% to 61.8%.</p>
+      <p>A second study asks the same question of the evidence a policy could gather. I build MuJoCo benchmarks in which two states look identical but differ in friction or actuator headroom, so the right action cannot be read from a single frame. A frozen decoder reaches 84.4% accuracy, and every error falls where the full trajectory is needed. A linear model that reads only the step-by-step increments of that trajectory recovers the right choice, so the evidence is there and the decoder does not use it.</p>
+      <p>RIFT, with Yimin Tang and Erdem Bıyık at USC, is the planning side of the same instinct. When a multi-robot plan becomes infeasible, RIFT deforms it locally instead of planning again, and every robot&rsquo;s endpoints stay exact. The coordination step is a quadratic program with one row per active inter-robot conflict, so its size follows the conflicts rather than the team. On a public 30-instance benchmark of cluttered environments, RIFT and db-ECBS tie at first order, 29 of 30 each. At second order RIFT still solves 29 of 30 while db-ECBS solves 16 and db-CBS 10, and the price is solution quality rather than time.</p>
+      <p>The same habit runs through my work with Siqin Wang at USC&rsquo;s Spatial Sciences Institute. A bus-route benchmark grounded in GTFS data retrieves alternative routes and reranks them by the stops they serve, and the gain is reported against shortest-path baselines. A wildfire-forecasting benchmark ranks map cells under an area budget, with spatially blocked validation. With Itay Hen at USC&rsquo;s Information Sciences Institute I worked on tree covers for spin-glass optimization, where the trade-off between coverage and cost is measured against a legacy baseline.</p>
+      <p>Two things hold this together. I build negative controls that must fail before a check is trusted, and I trace every reported number to its source file. Both completed studies report negative primary results, and I report them as such. The question I want to work on next is how a planner should decide, online, when to trust a learned world model and when to repair the plan it already has.</p>
+    </div>
+  </section>
+
+  <!-- 03 Publications -->
+  <section id="publications" class="wrap">
+    <div class="sechead">
+      <span class="num">03</span><span class="label">Publications</span><span class="line"></span>
+      <span class="desc">Preprints and manuscripts</span>
+    </div>
+    <ul class="pubs">
+      <li class="pub">
+        <div class="tag">Preprint &middot; 2026</div>
+        <div>
+          <h4>ARC-Bench: Closed-Loop Replanning Masks Broken Action Ranking in Frozen JEPA World Models</h4>
+          <p><span class="me">Zhengshu Zhang</span>, Zhiyuan Li</p>
+          <p class="where"><a href="https://arxiv.org/abs/2609.05461">arXiv:2609.05461 &rarr;</a></p>
+        </div>
+      </li>
+      <li class="pub">
+        <div class="tag">Preprint &middot; 2026</div>
+        <div>
+          <h4>When Does Test-Time Physical Diagnosis Pay? A Frozen Policy Buys Evidence It Never Reads</h4>
+          <p><span class="me">Zhengshu Zhang</span></p>
+          <p class="where"><a href="https://arxiv.org/abs/2609.22299">arXiv:2609.22299 &rarr;</a></p>
+        </div>
+      </li>
+      <li class="pub">
+        <div class="tag">In preparation</div>
+        <div>
+          <h4>RIFT: Repair of Infeasible Fixed-Endpoint Trajectories for Multi-Robot Kinodynamic Planning Without Re-planning</h4>
+          <p><span class="me">Zhengshu Zhang</span>, Yimin Tang, Erdem Bıyık</p>
+        </div>
+      </li>
+      <li class="pub">
+        <div class="tag">Manuscript</div>
+        <div>
+          <h4>Stop-Aware Reranking for Alternative Bus Routes: A GTFS-Grounded GeoAI Benchmark and LA28 Application</h4>
+          <p><span class="me">Zhengshu Zhang</span>, Siqin Wang</p>
+          <p class="where">In final revision</p>
+        </div>
+      </li>
+      <li class="pub">
+        <div class="tag">Manuscript</div>
+        <div>
+          <h4>CINDER: Chronology-Aligned, Imbalance-Aware Neighborhood-Dynamic Encoding with Area-Budgeted Ranking for Annual Wildfire Forecasting</h4>
+          <p><span class="me">Zhengshu Zhang</span> et al., with Siqin Wang&rsquo;s group</p>
+          <p class="where">In progress</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 04 Contact -->
+  <section id="contact" class="wrap contact">
+    <div class="sechead">
+      <span class="num">04</span><span class="label">Contact</span><span class="line"></span>
+    </div>
+    <div class="row">
+      <a class="pill solid" href="mailto:zhengshu@usc.edu">zhengshu@usc.edu</a>
+      <a class="pill" href="ZhengshuZhang.pdf">Curriculum vitae</a>
+      <a class="pill" href="https://github.com/forestzs">GitHub</a>
+      <span class="loc">Los Angeles, California</span>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <footer>
+      <span>Zhengshu Zhang &middot; University of Southern California</span>
+      <span>Updated October 2026</span>
+    </footer>
+  </div>
+
+</main>
+
+<script>
+  (function(){
+    var v=document.getElementById('replay'), b=document.getElementById('toggle');
+    if(!v||!b) return;
+    function label(){ b.textContent = v.paused ? 'Play replay' : 'Pause replay'; }
+    b.addEventListener('click', function(){ if(v.paused){ v.play(); } else { v.pause(); } label(); });
+    v.addEventListener('play', label); v.addEventListener('pause', label);
+    var p=v.play(); if(p && p.catch){ p.catch(function(){ label(); }); }
+  })();
+</script>
+</body>
+</html>
