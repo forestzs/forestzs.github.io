@@ -31,9 +31,9 @@
   /* top bar */
   .top{border-bottom:1px solid var(--rule);background:var(--bg)}
   .top .wrap{display:flex;align-items:center;justify-content:space-between;height:76px}
-  .brand{font-family:var(--serif);font-size:22px;font-weight:600;display:flex;align-items:center;gap:12px}
-  .brand i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent)}
-  .brand span{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .brand .tag{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);font-weight:500}
   nav a{text-decoration:none;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-left:30px}
   nav a:hover{color:var(--accent)}
 
@@ -45,7 +45,7 @@
   .sechead .desc{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--muted)}
 
   /* hero */
-  .hero{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:72px;align-items:start}
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:72px;align-items:center}
   .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:22px}
   .name{font-family:var(--serif);font-weight:600;font-size:clamp(44px,5.6vw,72px);line-height:1.05;letter-spacing:-.015em;margin:0 0 24px;white-space:nowrap}
   .lede{font-family:var(--serif);font-style:italic;font-size:21px;line-height:1.45;color:var(--muted);margin:0 0 30px;max-width:620px}
@@ -65,7 +65,8 @@
   .tl{border-top:1px solid var(--rule)}
   .tl .row{display:grid;grid-template-columns:200px 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
   .tl .when{font-size:13px;color:var(--muted);padding-top:5px}
-  .tl h4{font-size:20px;margin:0 0 6px;line-height:1.3}
+  .tl h4{font-size:20px;margin:0 0 6px;line-height:1.3;display:flex;align-items:center;gap:12px}
+  .mark{height:34px;width:auto;flex:none}
   .tl p{font-size:15px;color:var(--muted);margin:0 0 4px;line-height:1.5}
   .tl p.role{color:var(--body)}
 
@@ -137,7 +138,7 @@
 
 <header class="top">
   <div class="wrap">
-    <div class="brand">Zhengshu Zhang<i></i><span>USC</span></div>
+    <div class="brand"><span class="tag">World models</span><i></i><span class="tag">Planning</span><i></i><span class="tag">Robots</span></div>
     <nav>
       <a href="#about">About</a>
       <a href="#research">Research</a>
@@ -154,7 +155,6 @@
   <section id="about" class="wrap">
     <div class="sechead">
       <span class="num">01</span><span class="label">About</span><span class="line"></span>
-      <span class="desc">World models &middot; planning &middot; robots</span>
     </div>
 
     <div class="hero">
@@ -166,8 +166,7 @@
         <p class="bio">I work with <a href="https://ebiyik.github.io/">Erdem Bıyık</a> at USC Viterbi on multi-robot motion planning, and with <a href="https://lizhyun.github.io/">Zhiyuan Li</a> at Aalto University on world models. One line resolves conflicts between robots&rsquo; trajectories by correcting them instead of replanning them. The other audits whether a learned model&rsquo;s ranking of candidate actions can be trusted. With <a href="https://sites.usc.edu/itayhen/">Itay Hen</a> at USC&rsquo;s Information Sciences Institute and <a href="https://dornsife.usc.edu/spatial/profile/siqin-sisi-wang/">Siqin Wang</a> at the Spatial Sciences Institute, I have worked on graph algorithms for planning, from route search on transit networks to tree covers for spin-glass optimization.</p>
       </div>
       <figure class="portrait">
-        <img src="media/portrait.jpg" alt="Zhengshu Zhang" width="1000" height="1000">
-        <figcaption>Zhengshu Zhang &middot; Los Angeles</figcaption>
+        <img src="media/portrait.jpg" alt="Portrait" width="1000" height="1000">
       </figure>
     </div>
 
@@ -178,14 +177,14 @@
         <div class="row">
           <div class="when">2025 &ndash; 2026 (expected)</div>
           <div>
-            <h4>University of Southern California</h4>
+            <h4>University of Southern California <img class="mark" src="media/usc.svg" alt=""></h4>
             <p class="role">M.S. &middot; Spatial Data Science</p>
           </div>
         </div>
         <div class="row">
           <div class="when">2015 &ndash; 2019</div>
           <div>
-            <h4>Sichuan Agricultural University</h4>
+            <h4>Sichuan Agricultural University <img class="mark" src="media/scau.png" alt=""></h4>
             <p class="role">B.Eng. &middot; Food Quality and Safety</p>
           </div>
         </div>
