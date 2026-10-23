@@ -163,7 +163,7 @@
         <h1 class="name">Zhengshu Zhang</h1>
         <p class="lede">My research asks when a learned world model genuinely supports robot planning, and how to tell when it only appears to.</p>
         <p class="intro">I&rsquo;m a master&rsquo;s student in Spatial Data Science at the University of Southern California, graduating in December 2026, and I am applying for PhD study beginning Fall 2027.</p>
-        <p class="bio">I work with <a href="https://ebiyik.github.io/">Erdem Bıyık</a> at USC Viterbi on multi-robot motion planning, and with <a href="https://lizhyun.github.io/">Zhiyuan Li</a> at Aalto University on world models. One line resolves conflicts between robots&rsquo; trajectories by correcting them instead of replanning them. The other audits whether a learned model&rsquo;s ranking of candidate actions can be trusted. With <a href="https://sites.usc.edu/itayhen/">Itay Hen</a> at USC&rsquo;s Information Sciences Institute and <a href="https://dornsife.usc.edu/spatial/profile/siqin-sisi-wang/">Siqin Wang</a> at the Spatial Sciences Institute, I have worked on graph algorithms for planning, from route search on transit networks to tree covers for spin-glass optimization.</p>
+        <p class="bio">I work with <a href="https://ebiyik.github.io/" target="_blank" rel="noopener">Erdem Bıyık</a> at USC Viterbi on multi-robot motion planning, and with <a href="https://lizhyun.github.io/" target="_blank" rel="noopener">Zhiyuan Li</a> at Aalto University on world models. One line resolves conflicts between robots&rsquo; trajectories by correcting them instead of replanning them. The other audits whether a learned model&rsquo;s ranking of candidate actions can be trusted. With <a href="https://sites.usc.edu/itayhen/" target="_blank" rel="noopener">Itay Hen</a> at USC&rsquo;s Information Sciences Institute and <a href="https://dornsife.usc.edu/spatial/profile/siqin-sisi-wang/" target="_blank" rel="noopener">Siqin Wang</a> at the Spatial Sciences Institute, I have worked on graph algorithms for planning, from route search on transit networks to tree covers for spin-glass optimization.</p>
       </div>
       <figure class="portrait">
         <img src="media/portrait.jpg" alt="Portrait" width="1000" height="1000">
@@ -247,7 +247,7 @@
           <div class="kicker">Multi-robot motion planning</div>
           <h4>Repair, not replan.</h4>
           <p>Robots cross a map full of obstacles. When their trajectories conflict, RIFT corrects the controls of the robots involved instead of replanning them, and moves the end of every trajectory back onto its goal state.</p>
-          <div class="links"><a href="media/clutter.mp4">Watch the replay &rarr;</a><span>&middot;</span>Paper in preparation</div>
+          <div class="links"><a href="media/clutter.mp4" target="_blank" rel="noopener">Watch the replay &rarr;</a><span>&middot;</span>Paper in preparation</div>
         </div>
         <div class="card">
           <div class="media">
@@ -257,7 +257,7 @@
           <div class="kicker">World-model audit</div>
           <h4>Ranked first, and wrong.</h4>
           <p>Two action sequences from the same search. The world model ranks the one that misses the goal above the one that reaches it. ARC-Bench measures how often that happens, with the candidates fixed before the model runs.</p>
-          <div class="links"><a href="https://arxiv.org/abs/2609.05461">Read the paper on arXiv &rarr;</a></div>
+          <div class="links"><a href="https://arxiv.org/abs/2609.05461" target="_blank" rel="noopener">Read the paper on arXiv &rarr;</a></div>
         </div>
       </div>
     </div>
@@ -277,12 +277,12 @@
 
     <div class="essay">
       <h3>How I think about planning with learned models</h3>
-      <p>My first research problems were on graphs. With <a href="https://sites.usc.edu/itayhen/">Itay Hen</a> at USC&rsquo;s Information Sciences Institute I built tree structures over spin-glass graphs that optimize a given objective, and with <a href="https://dornsife.usc.edu/spatial/profile/siqin-sisi-wang/">Siqin Wang</a> at USC&rsquo;s Spatial Sciences Institute I worked on route planning for Los Angeles bus networks, where candidate routes are searched on the transit graph and reranked by the stops they serve.</p>
-      <p>Both problems hand the planner a fixed map. I became interested in what happens when the map is replaced by a model learned from data: how a robot should plan its actions over a world model, and how to tell whether the model deserves that trust. On my own I studied whether a frozen policy uses the physical evidence it could gather at test time, and found that it pays for evidence about friction and actuator headroom that it never reads. With <a href="https://lizhyun.github.io/">Zhiyuan Li</a> at Aalto University I then built ARC-Bench, now under review at ICLR 2027, which shows that frozen JEPA world models rank candidate action sequences wrongly and that closed-loop replanning hides the failure.</p>
-      <p>With <a href="https://ebiyik.github.io/">Erdem Bıyık</a> at USC Viterbi I work on multi-robot motion planning. Our planner, RIFT, corrects the controls of all robots together in iterations instead of replanning any of them, and each iteration has two parts. A collision step resolves the conflicts the trajectories still contain, with a constraint for each conflict and none for the pairs that are already clear. A final-state step moves the end of every trajectory toward its goal state, because the collision step keeps the ends fixed only in a linear approximation of the dynamics.</p>
+      <p>My first research problems were on graphs. With <a href="https://sites.usc.edu/itayhen/" target="_blank" rel="noopener">Itay Hen</a> at USC&rsquo;s Information Sciences Institute I built tree structures over spin-glass graphs that optimize a given objective, and with <a href="https://dornsife.usc.edu/spatial/profile/siqin-sisi-wang/" target="_blank" rel="noopener">Siqin Wang</a> at USC&rsquo;s Spatial Sciences Institute I worked on route planning for Los Angeles bus networks, where candidate routes are searched on the transit graph and reranked by the stops they serve.</p>
+      <p>Both problems hand the planner a fixed map. I became interested in what happens when the map is replaced by a model learned from data: how a robot should plan its actions over a world model, and how to tell whether the model deserves that trust. On my own I studied whether a frozen policy uses the physical evidence it could gather at test time, and found that it pays for evidence about friction and actuator headroom that it never reads. With <a href="https://lizhyun.github.io/" target="_blank" rel="noopener">Zhiyuan Li</a> at Aalto University I then built ARC-Bench, now under review at ICLR 2027, which shows that frozen JEPA world models rank candidate action sequences wrongly and that closed-loop replanning hides the failure.</p>
+      <p>With <a href="https://ebiyik.github.io/" target="_blank" rel="noopener">Erdem Bıyık</a> at USC Viterbi I work on multi-robot motion planning. Our planner, RIFT, corrects the controls of all robots together in iterations instead of replanning any of them, and each iteration has two parts. A collision step resolves the conflicts the trajectories still contain, with a constraint for each conflict and none for the pairs that are already clear. A final-state step moves the end of every trajectory toward its goal state, because the collision step keeps the ends fixed only in a linear approximation of the dynamics.</p>
 
       <h3>What I want to build</h3>
-      <p>Today&rsquo;s world models can generate futures that look right while breaking basic physics: <a href="https://arxiv.org/abs/2501.09038">visual realism does not imply physical understanding</a>, and <a href="https://arxiv.org/abs/2411.02385">scaling alone</a> does not make a model abstract physical laws rather than replay its closest training example. What I want to build is a world model that learns the physical rules themselves, and the key that lets a robot reach that understanding from the data it already has.</p>
+      <p>Today&rsquo;s world models can generate futures that look right while breaking basic physics: <a href="https://arxiv.org/abs/2501.09038" target="_blank" rel="noopener">visual realism does not imply physical understanding</a>, and <a href="https://arxiv.org/abs/2411.02385" target="_blank" rel="noopener">scaling alone</a> does not make a model abstract physical laws rather than replay its closest training example. What I want to build is a world model that learns the physical rules themselves, and the key that lets a robot reach that understanding from the data it already has.</p>
     </div>
   </section>
 
@@ -298,7 +298,7 @@
         <div>
           <h4>ARC-Bench: Closed-Loop Replanning Masks Broken Action Ranking in Frozen JEPA World Models</h4>
           <p><span class="me">Zhengshu Zhang</span>, Zhiyuan Li</p>
-          <p class="where"><a href="https://arxiv.org/abs/2609.05461">arXiv:2609.05461 &rarr;</a></p>
+          <p class="where"><a href="https://arxiv.org/abs/2609.05461" target="_blank" rel="noopener">arXiv:2609.05461 &rarr;</a></p>
         </div>
       </li>
       <li class="pub">
@@ -306,7 +306,7 @@
         <div>
           <h4>When Does Test-Time Physical Diagnosis Pay? A Frozen Policy Buys Evidence It Never Reads</h4>
           <p><span class="me">Zhengshu Zhang</span></p>
-          <p class="where"><a href="https://arxiv.org/abs/2609.22299">arXiv:2609.22299 &rarr;</a></p>
+          <p class="where"><a href="https://arxiv.org/abs/2609.22299" target="_blank" rel="noopener">arXiv:2609.22299 &rarr;</a></p>
         </div>
       </li>
       <li class="pub">
@@ -342,8 +342,8 @@
     </div>
     <div class="row">
       <a class="pill solid" href="mailto:zhengshu@usc.edu">zhengshu@usc.edu</a>
-      <a class="pill" href="ZhengshuZhang.pdf">Curriculum vitae</a>
-      <a class="pill" href="https://github.com/forestzs">GitHub</a>
+      <a class="pill" href="ZhengshuZhang.pdf" target="_blank" rel="noopener">Curriculum vitae</a>
+      <a class="pill" href="https://github.com/forestzs" target="_blank" rel="noopener">GitHub</a>
       <span class="loc">Los Angeles, California</span>
     </div>
   </section>
