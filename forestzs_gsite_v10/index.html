@@ -278,7 +278,7 @@
     <div class="essay">
       <h3>How I think about planning with learned models</h3>
       <p>My first research problems were on graphs. With <a href="https://sites.usc.edu/itayhen/" target="_blank" rel="noopener">Itay Hen</a> at USC&rsquo;s Information Sciences Institute I built tree structures over spin-glass graphs that optimize a given objective, and with <a href="https://dornsife.usc.edu/spatial/profile/siqin-sisi-wang/" target="_blank" rel="noopener">Siqin Wang</a> at USC&rsquo;s Spatial Sciences Institute I worked on route planning for Los Angeles bus networks, where candidate routes are searched on the transit graph and reranked by the stops they serve.</p>
-      <p>Both problems hand the planner a fixed map. I became interested in what happens when the map is replaced by a model learned from data: how a robot should plan its actions over a world model, and how to tell whether the model deserves that trust. On my own I studied whether a frozen policy uses the physical evidence it could gather at test time, and found that it pays for evidence about friction and actuator headroom that it never reads. With <a href="https://lizhyun.github.io/" target="_blank" rel="noopener">Zhiyuan Li</a> at Aalto University I then built ARC-Bench, now under review at ICLR 2027, which shows that frozen JEPA world models rank candidate action sequences wrongly and that closed-loop replanning hides the failure.</p>
+      <p>Both problems hand the planner a fixed map. I became interested in what happens when the map is replaced by a model learned from data: how a robot should plan its actions over a world model, and how to tell whether the model deserves that trust. On my own I asked when test-time physical diagnosis pays, and found that a frozen policy scoring 0.84 on unseen mechanisms makes every one of its errors where only the full trace carries the answer, because those inputs lie far outside its training range. With <a href="https://lizhyun.github.io/" target="_blank" rel="noopener">Zhiyuan Li</a> at Aalto University I then built ARC-Bench, now under review at ICLR 2027, which shows that frozen JEPA world models rank candidate action sequences wrongly and that closed-loop replanning hides the failure.</p>
       <p>With <a href="https://ebiyik.github.io/" target="_blank" rel="noopener">Erdem Bıyık</a> at USC Viterbi I work on multi-robot motion planning. Our planner, RIFT, corrects the controls of all robots together in iterations instead of replanning any of them, and each iteration has two parts. A collision step resolves the conflicts the trajectories still contain, with a constraint for each conflict and none for the pairs that are already clear. A final-state step moves the end of every trajectory toward its goal state, because the collision step keeps the ends fixed only in a linear approximation of the dynamics.</p>
 
       <h3>What I want to build</h3>
@@ -304,7 +304,7 @@
       <li class="pub">
         <div class="tag">Preprint &middot; 2026</div>
         <div>
-          <h4>When Does Test-Time Physical Diagnosis Pay? A Frozen Policy Buys Evidence It Never Reads</h4>
+          <h4>When Does Test-Time Physical Diagnosis Pay?</h4>
           <p><span class="me">Zhengshu Zhang</span></p>
           <p class="where"><a href="https://arxiv.org/abs/2609.22299" target="_blank" rel="noopener">arXiv:2609.22299 &rarr;</a></p>
         </div>
